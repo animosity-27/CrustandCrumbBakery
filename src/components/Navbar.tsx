@@ -70,11 +70,12 @@ export function Navbar({ page, onNavigate }: NavbarProps) {
           />
         </button>
 
-        {/* BUTTONS */}
-        <div className="flex items-center justify-between w-full max-w-4xl">
+        {/* BUTTONS - FIXED FOR MOBILE */}
+        <div className="flex items-center justify-between w-full max-w-4xl flex-wrap gap-4 px-2">
           
-          <div className="w-10" />
+          <div className="w-10 hidden sm:block" />
 
+          {/* DESKTOP MENU LINKS */}
           <ul className="hidden md:flex items-center gap-24">
             {links.map((l) => (
               <li key={l.label}>
@@ -83,15 +84,24 @@ export function Navbar({ page, onNavigate }: NavbarProps) {
             ))}
           </ul>
 
-          <div className="flex items-center gap-6">
-            <button type="button" onClick={() => onNavigate('track')} className="hidden h-10 w-10 place-items-center text-espresso-700 transition-colors hover:bg-kraft-200/70 sm:grid" aria-label="Track order">
+          {/* ACTION BUTTONS - VISIBLE ON ALL SCREENS */}
+          <div className="flex items-center gap-4 sm:gap-6">
+            
+            {/* TRACK ORDER - Always visible */}
+            <button 
+              type="button" 
+              onClick={() => onNavigate('track')} 
+              className="flex h-10 w-10 place-items-center text-espresso-700 transition-colors hover:bg-kraft-200/70" 
+              aria-label="Track order"
+            >
               <PackageSearch className="h-5 w-5" />
             </button>
             
+            {/* BASKET BUTTON - Always visible */}
             <button 
               type="button" 
               onClick={handleOpenCart} 
-              className={`relative grid h-10 w-10 place-items-center text-espresso-700 transition-colors hover:bg-kraft-200/70 ${bump ? 'animate-bob' : ''}`} 
+              className={`relative flex h-10 w-10 place-items-center text-espresso-700 transition-colors hover:bg-kraft-200/70 ${bump ? 'animate-bob' : ''}`} 
               aria-label="Open cart"
             >
               <ShoppingBag className="h-5 w-5" />
@@ -100,20 +110,31 @@ export function Navbar({ page, onNavigate }: NavbarProps) {
               )}
             </button>
 
+            {/* ORDER NOW - Always visible, styled for mobile */}
             <button 
               type="button" 
               onClick={handleOpenCart} 
-              className="hidden bg-sage-500 px-5 py-2.5 text-sm font-bold text-white md:inline-flex hover:bg-sage-600 transition-colors"
+              className="flex bg-sage-500 px-4 py-2 text-sm font-bold text-white hover:bg-sage-600 transition-colors"
             >
               Order Now
+            </button>
+
+            {/* MOBILE HAMBURGER MENU */}
+            <button 
+              type="button" 
+              onClick={() => setOpen((v) => !v)} 
+              className="flex h-10 w-10 place-items-center text-espresso-700 hover:bg-kraft-200/70 md:hidden" 
+              aria-label="Toggle menu"
+            >
+              {open ? <X className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
             </button>
           </div>
         </div>
       </div>
 
-      {/* MOBILE DROPDOWN - FIXED: changed md:hidden to sm:hiden */}
+      {/* MOBILE DROPDOWN MENU */}
       {open && (
-        <div className="sm:hidden border-t border-kraft-300/60 bg-cream-100/95 px-5 pb-5 pt-3 backdrop-blur-md">
+        <div className="md:hidden border-t border-kraft-300/60 bg-cream-100/95 px-5 pb-5 pt-3 backdrop-blur-md">
           <ul className="space-y-1">
             {links.map((l) => (
               <li key={l.label}>

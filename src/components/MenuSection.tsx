@@ -145,7 +145,6 @@ function FeaturedSpotlight({ product, onAdd }: { product: Product; onAdd: () => 
     </Reveal>
   );
 }
-
 function MenuCard({ product, index, onAdd }: { product: Product; index: number; onAdd: () => void }) {
   const soldOut = product.stock <= 0;
   return (

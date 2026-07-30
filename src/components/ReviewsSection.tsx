@@ -123,7 +123,6 @@ export function ReviewsSection() {
             </button>
           </form>
         </Reveal>
-
         <div className="lg:col-span-3">
           {loading ? (
             <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-sage-500" /></div>

@@ -1,0 +1,310 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --cream: #f9f6f1;
+  --kraft: #ede0d4;
+  --espresso: #3e2723;
+  --gold: #d4a373;
+  --sage: #8d9c7c;
+  --mustard: #e1a93a;
+  --ink: #2a1b16;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Nunito', ui-sans-serif, system-ui, sans-serif;
+  color: #3e2723;
+  background-color: #f9f6f1;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.font-display {
+  font-family: 'Fraunces', ui-serif, Georgia, serif;
+  font-optical-sizing: auto;
+}
+
+/* receipt / ledger monospace for codes, prices, stats */
+.font-receipt {
+  font-family: 'JetBrains Mono', 'Courier New', ui-monospace, monospace;
+  letter-spacing: 0.02em;
+}
+
+section[id] {
+  scroll-margin-top: 88px;
+}
+
+/* ============================================================
+   NO BORDER RADIUS — global kill switch. Sharp bakery edges.
+   Creative silhouettes come from clip-path, torn paper,
+   scalloped edges, and baker's scoring slashes.
+   ============================================================ */
+* {
+  border-radius: 0 !important;
+}
+
+/* ============================================================
+   BAKER'S SCORING SLASH MOTIF
+   The diagonal cuts bakers score into dough before baking.
+   Used as dividers, frame accents, and card details.
+   ============================================================ */
+
+/* Scoring divider — a band of diagonal slashes */
+.scoring-divider {
+  height: 14px;
+  background-image: repeating-linear-gradient(
+    -58deg,
+    transparent 0 9px,
+    var(--sage) 9px 11px,
+    transparent 11px 22px
+  );
+  opacity: 0.5;
+}
+
+/* Scoring top-edge — diagonal slashes along the top of a card */
+.scoring-top {
+  border-top: 3px solid var(--espresso);
+  background-image: repeating-linear-gradient(
+    -58deg,
+    transparent 0 7px,
+    rgba(62, 39, 35, 0.18) 7px 9px,
+    transparent 9px 18px
+  );
+  background-size: 18px 3px;
+  background-position: top;
+  background-repeat: repeat-x;
+}
+
+/* Diagonal slash accent line (single bold slash pair) */
+.slash-accent::before {
+  content: '';
+  display: inline-block;
+  width: 26px;
+  height: 3px;
+  background: var(--mustard);
+  transform: skewX(-28deg);
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+/* ============================================================
+   STAMP / STICKER SHAPES (clip-path — no radius)
+   ============================================================ */
+
+.cc-notch {
+  clip-path: polygon(0 0, calc(100% - 11px) 0, 100% 11px, 100% 100%, 11px 100%, 0 calc(100% - 11px));
+  box-shadow: none !important;
+  filter: drop-shadow(0 4px 0 rgba(62, 39, 35, 0.22));
+  transition: filter 0.22s cubic-bezier(0.22, 1, 0.36, 1), transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cc-notch:hover { filter: drop-shadow(0 6px 0 rgba(62, 39, 35, 0.28)); transform: translateY(-2px); }
+.cc-notch:active { filter: drop-shadow(0 1px 0 rgba(62, 39, 35, 0.22)); transform: translateY(1px); }
+.cc-notch:disabled { filter: drop-shadow(0 2px 0 rgba(62, 39, 35, 0.12)); transform: none; }
+
+.cc-tag {
+  clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+  box-shadow: none !important;
+  filter: drop-shadow(0 5px 0 rgba(62, 39, 35, 0.25));
+  transition: filter 0.22s cubic-bezier(0.22, 1, 0.36, 1), transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cc-tag:hover { filter: drop-shadow(0 7px 0 rgba(62, 39, 35, 0.30)); transform: translateY(-2px); }
+.cc-tag:active { filter: drop-shadow(0 2px 0 rgba(62, 39, 35, 0.25)); transform: translateY(1px); }
+.cc-tag:disabled { filter: drop-shadow(0 2px 0 rgba(62, 39, 35, 0.12)); transform: none; }
+
+.cc-frame {
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+}
+
+.notch-ticket {
+  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+}
+
+/* ============================================================
+   HAND-STAMPED INK-BLEED PRICE TAG
+   Looks like it was stamped with a real ink price gun —
+   slightly rotated, with rough edges and ink texture.
+   ============================================================ */
+.price-stamp {
+  position: relative;
+  background: var(--kraft);
+  color: var(--ink);
+  padding: 0.45rem 0.9rem;
+  transform: rotate(-3deg);
+  box-shadow: 0 0 0 2px rgba(62, 39, 35, 0.15);
+}
+.price-stamp::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='100'%20height='100'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.9'%20numOctaves='2'/%3E%3CfeColorMatrix%20type='saturate'%20values='0'/%3E%3C/filter%3E%3Crect%20width='100%25'%20height='100%25'%20filter='url(%23n)'%20opacity='0.4'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.price-stamp--gold { background: var(--mustard); }
+.price-stamp--sage { background: #c7d0bb; }
+
+/* ============================================================
+   WAX-STAMP SEAL (circular text stamp)
+   Slightly rotated, ink-bleed texture, rotates slowly on idle.
+   ============================================================ */
+.stamp-seal {
+  position: relative;
+  filter: drop-shadow(0 3px 6px rgba(62, 39, 35, 0.2));
+}
+.stamp-seal svg { animation: spin-slow 32s linear infinite; }
+.stamp-seal:hover svg { animation-duration: 8s; }
+.stamp-seal::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='80'%20height='80'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='1.2'%20numOctaves='2'/%3E%3CfeColorMatrix%20type='saturate'%20values='0'/%3E%3C/filter%3E%3Crect%20width='100%25'%20height='100%25'%20filter='url(%23n)'%20opacity='0.5'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* ============================================================
+   STEAM WISPS — rising steam over the featured bake
+   ============================================================ */
+.steam {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.85);
+  filter: blur(6px);
+  animation: steam-rise 4s ease-in-out infinite;
+}
+.steam:nth-child(1) { left: 30%; animation-delay: 0s; }
+.steam:nth-child(2) { left: 45%; animation-delay: 1.2s; }
+.steam:nth-child(3) { left: 58%; animation-delay: 0.6s; }
+.steam:nth-child(4) { left: 38%; animation-delay: 2s; }
+.steam:nth-child(5) { left: 52%; animation-delay: 1.8s; }
+
+/* ============================================================
+   SCROLLING MARQUEE TICKER — "fresh from the oven" band
+   ============================================================ */
+.ticker {
+  overflow: hidden;
+  white-space: nowrap;
+}
+.ticker-track {
+  display: inline-flex;
+  animation: ticker-scroll 24s linear infinite;
+  will-change: transform;
+}
+.ticker:hover .ticker-track { animation-play-state: paused; }
+
+/* ============================================================
+   DOUGH-RISE ENTRANCE — elements swell in like rising dough
+   ============================================================ */
+@keyframes dough-rise {
+  0% { opacity: 0; transform: translateY(34px) scale(0.94); }
+  60% { opacity: 1; transform: translateY(-4px) scale(1.02); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.dough-rise {
+  animation: dough-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ============================================================
+   OVEN-WARM AMBIENT GLOW — pulsing warmth
+   ============================================================ */
+@keyframes oven-glow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
+}
+.oven-glow {
+  background: radial-gradient(ellipse at center, rgba(225, 169, 58, 0.25), transparent 70%);
+  animation: oven-glow 6s ease-in-out infinite;
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+@keyframes ticker-scroll { to { transform: translateX(-50%); } }
+@keyframes steam-rise {
+  0% { transform: translateY(0) scale(1); opacity: 0; }
+  15% { opacity: 0.7; }
+  50% { opacity: 0.5; }
+  100% { transform: translateY(-80px) scale(2.5); opacity: 0; }
+}
+
+/* ---------- Nav hover: animated "crust wipe" ---------- */
+.nav-link { position: relative; }
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  height: 8px;
+  width: 100%;
+  background: var(--sage);
+  clip-path: polygon(0 35%, 8% 10%, 18% 60%, 28% 20%, 38% 70%, 48% 25%, 58% 65%, 68% 15%, 78% 60%, 88% 25%, 100% 50%, 100% 100%, 0 100%);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.nav-link:hover::after, .nav-link[data-active="true"]::after { transform: scaleX(1); }
+
+/* ---------- Scroll reveal ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(34px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal-in { opacity: 1; transform: none; }
+
+/* ---------- Textures ---------- */
+.warm-filter { filter: sepia(0.22) saturate(1.18) brightness(1.05) contrast(1.02) hue-rotate(-6deg); }
+
+.parchment {
+  background-color: #ede0d4;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='180'%20height='180'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.85'%20numOctaves='3'%20stitchTiles='stitch'/%3E%3CfeColorMatrix%20type='saturate'%20values='0'/%3E%3C/filter%3E%3Crect%20width='100%25'%20height='100%25'%20filter='url(%23n)'%20opacity='0.32'/%3E%3C/svg%3E");
+  background-blend-mode: multiply;
+}
+.kraft-paper {
+  background-color: #ede0d4;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='180'%20height='180'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.8'%20numOctaves='3'%20stitchTiles='stitch'/%3E%3CfeColorMatrix%20type='saturate'%20values='0'/%3E%3C/filter%3E%3Crect%20width='100%25'%20height='100%25'%20filter='url(%23n)'%20opacity='0.5'/%3E%3C/svg%3E"),
+    radial-gradient(circle at 50% -10%, rgba(255,255,255,0.35), transparent 55%),
+    radial-gradient(circle at 50% 110%, rgba(120,90,60,0.18), transparent 55%);
+  background-blend-mode: multiply, normal, normal;
+}
+.torn-paper {
+  clip-path: polygon(0% 2.2%, 8% 0.6%, 17% 2.4%, 26% 0.8%, 35% 2.2%, 44% 0.4%, 53% 2.5%, 62% 1%, 71% 2.1%, 80% 0.6%, 89% 2.3%, 100% 1.2%, 100% 98.4%, 89% 99.3%, 80% 97.7%, 71% 99.1%, 62% 97.6%, 53% 99.5%, 44% 97.9%, 35% 99.2%, 26% 97.5%, 17% 99.3%, 8% 97.8%, 0% 98.2%);
+}
+
+/* ---------- Inputs ---------- */
+.cc-input {
+  width: 100%;
+  border: 2px solid #e0cdb8;
+  background-color: #f9f6f1;
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  color: #3e2723;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.cc-input:focus { border-color: #8d9c7c; box-shadow: 0 0 0 3px rgba(141, 156, 124, 0.18); }
+.cc-input::placeholder { color: #a89a8a; }
+
+/* ---------- Card hover ---------- */
+.cc-card { transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+.cc-card:hover { transform: translateY(-6px); }
+.cc-zoom img { transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
+.cc-zoom:hover img { transform: scale(1.07); }
+
+.scroll-thin::-webkit-scrollbar { width: 8px; height: 8px; }
+.scroll-thin::-webkit-scrollbar-thumb { background: #d2bd9f; }
+.scroll-thin::-webkit-scrollbar-track { background: transparent; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { transition: none; opacity: 1; transform: none; }
+  .nav-link::after, .cc-notch, .cc-tag, .cc-card, .cc-zoom img, .stamp-seal svg, .ticker-track, .steam, .oven-glow { transition: none; animation: none; }
+}

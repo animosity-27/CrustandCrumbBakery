@@ -43,25 +43,21 @@ export function Navbar({ page, onNavigate }: NavbarProps) {
     setOpen(false);
   };
 
-  // ✅ FIX: Force the drawer to open on ANY page
   const handleOpenCart = () => {
-    // 1. If we are not on the home page, go home first
     if (page !== 'home') {
       onNavigate('home');
-      // 2. Wait a tiny bit for the page switch, then open the drawer
       setTimeout(() => {
         openCart();
         window.dispatchEvent(new Event('open-cart-drawer'));
       }, 100);
     } else {
-      // 3. If we are already home, open instantly
       openCart();
       window.dispatchEvent(new Event('open-cart-drawer'));
     }
   };
 
   return (
-<header className={`relative inset-x-0 top-0 z-40 transition-all duration-300 ${scrolled ? 'bg-transparent backdrop-blur-md shadow-soft' : 'bg-transparent backdrop-blur-sm'}`}>
+    <header className={`relative inset-x-0 top-0 z-40 transition-all duration-300 ${scrolled ? 'bg-transparent backdrop-blur-md shadow-soft' : 'bg-transparent backdrop-blur-sm'}`}>
       {/* CONTAINER */}
       <div className="mx-auto max-w-6xl px-5 py-2 sm:px-8 flex flex-col items-center justify-center">
         
@@ -92,7 +88,6 @@ export function Navbar({ page, onNavigate }: NavbarProps) {
               <PackageSearch className="h-5 w-5" />
             </button>
             
-            {/* ✅ FIXED BASKET BUTTON */}
             <button 
               type="button" 
               onClick={handleOpenCart} 
@@ -105,7 +100,6 @@ export function Navbar({ page, onNavigate }: NavbarProps) {
               )}
             </button>
 
-            {/* ✅ FIXED ORDER NOW BUTTON */}
             <button 
               type="button" 
               onClick={handleOpenCart} 
@@ -117,9 +111,9 @@ export function Navbar({ page, onNavigate }: NavbarProps) {
         </div>
       </div>
 
-      {/* MOBILE DROPDOWN */}
+      {/* MOBILE DROPDOWN - FIXED: changed md:hidden to sm:hidden */}
       {open && (
-        <div className="md:hidden border-t border-kraft-300/60 bg-cream-100/95 px-5 pb-5 pt-3 backdrop-blur-md">
+        <div className="sm:hidden border-t border-kraft-300/60 bg-cream-100/95 px-5 pb-5 pt-3 backdrop-blur-md">
           <ul className="space-y-1">
             {links.map((l) => (
               <li key={l.label}>

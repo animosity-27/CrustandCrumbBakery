@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Loader2, Send, Star, MessageSquareQuote, Filter } from 'lucide-react';
+import { Loader2, Send, Star, MessageSquareQuote } from 'lucide-react';
 import { supabase, type Review } from '@/lib/supabase';
 import { Reveal } from '@/components/Reveal';
 import { StarRating } from '@/components/StarRating';
@@ -10,7 +10,6 @@ export function ReviewsSection() {
   const [loading, setLoading] = useState(true);
   const [avg, setAvg] = useState(0);
   const [count, setCount] = useState(0);
-  const [filterRating, setFilterRating] = useState<number | null>(null);
 
   const [code, setCode] = useState('');
   const [author, setAuthor] = useState('');
@@ -22,15 +21,15 @@ export function ReviewsSection() {
 
   const loadReviews = async () => {
     setLoading(true);
-    let query = supabase.from('reviews').select('*').order('created_at', { ascending: false });
-    if (filterRating !== null) {
-      query = query.eq('rating', filterRating);
-    }
-    const { data } = await query.limit(12);
-    setReviews(data ?? []);
-    if (data && data.length) {
-      setAvg(data.reduce((s, r) => s + r.rating, 0) / data.length);
-      setCount(data.length);
+    const { data } = await supabase.from('reviews').select('*').order('created_at', { ascending: false }).limit(12);
+    
+    // FILTER OUT DEAD REVIEWS (empty body strings)
+    const cleanReviews = (data ?? []).filter((r) => r.body && r.body.trim() !== '');
+    
+    setReviews(cleanReviews);
+    if (cleanReviews.length > 0) {
+      setAvg(cleanReviews.reduce((s, r) => s + r.rating, 0) / cleanReviews.length);
+      setCount(cleanReviews.length);
     } else {
       setAvg(0);
       setCount(0);
@@ -38,7 +37,7 @@ export function ReviewsSection() {
     setLoading(false);
   };
 
-  useEffect(() => { loadReviews(); }, [filterRating]);
+  useEffect(() => { loadReviews(); }, []);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,6 +66,7 @@ export function ReviewsSection() {
       loadReviews();
     }
   };
+
   return (
     <section id="reviews" className="relative bg-cream-200 py-20 sm:py-28">
       <Reveal className="mx-auto max-w-6xl px-5 sm:px-8">
@@ -80,21 +80,7 @@ export function ReviewsSection() {
               {count}
             </span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-espresso-500 text-sm font-medium hidden sm:inline">Filter:</span>
-            <select
-              value={filterRating ?? ''}
-              onChange={(e) => setFilterRating(e.target.value ? Number(e.target.value) : null)}
-              className="cc-input !py-1 !px-2 text-sm font-bold"
-            >
-              <option value="">All</option>
-              <option value="5">5 ★</option>
-              <option value="4">4 ★</option>
-              <option value="3">3 ★</option>
-              <option value="2">2 ★</option>
-              <option value="1">1 ★</option>
-            </select>
-          </div>
+          <span className="text-espresso-500 text-sm font-medium hidden sm:block">See all reviews →</span>
         </div>
         
         {count > 0 && (
@@ -106,7 +92,6 @@ export function ReviewsSection() {
       </Reveal>
 
       <div className="mx-auto mt-6 grid max-w-6xl gap-8 px-5 sm:px-8 lg:grid-cols-5">
-        {/* Review form — unchanged */}
         <Reveal className="lg:col-span-2">
           <form onSubmit={submit} className="kraft-paper scoring-top relative p-6 shadow-card sm:p-8">
             <h3 className="slash-accent font-display text-xl font-extrabold text-espresso-800">Leave a review</h3>
@@ -139,7 +124,6 @@ export function ReviewsSection() {
           </form>
         </Reveal>
 
-        {/* Reviews list */}
         <div className="lg:col-span-3">
           {loading ? (
             <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-sage-500" /></div>

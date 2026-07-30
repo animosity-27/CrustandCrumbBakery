@@ -19,8 +19,47 @@ export function MenuSection() {
         .eq('is_active', true)
         .order('sort_order', { ascending: true });
       if (!active) return;
-      if (error) { setLoading(false); return; }
-      setProducts(data ?? []);
+      
+      // If Supabase fails or returns empty, use hardcoded fallback
+      if (error || !data || data.length === 0) {
+        setProducts([
+          {
+            id: 'fallback-1',
+            name: 'Cream Cheese Garlic Brioche',
+            description: 'Golden, buttery brioche stuffed with gooey cream cheese, topped with savory garlic butter and fresh parsley.',
+            price: 120,
+            image: 'https://images.pexels.com/photos/14841924/pexels-photo-14841924.jpeg?auto=compress&cs=tinysrgb&w=600',
+            warm_filter: true,
+            stock: 20,
+            is_active: true,
+            sort_order: 1,
+          },
+          {
+            id: 'fallback-2',
+            name: 'Choco Banana Bread',
+            description: 'Rich, moist banana bread loaded with dark chocolate chunks and ripe bananas.',
+            price: 100,
+            image: 'https://images.pexels.com/photos/2057311/pexels-photo-2057311.jpeg?auto=compress&cs=tinysrgb&w=600',
+            warm_filter: false,
+            stock: 15,
+            is_active: true,
+            sort_order: 2,
+          },
+          {
+            id: 'fallback-3',
+            name: 'Fudgy Brownies',
+            description: 'Deep, dark chocolate brownies with a crackly top and gooey center, finished with sea salt.',
+            price: 90,
+            image: 'https://images.pexels.com/photos/1854677/pexels-photo-1854677.jpeg?auto=compress&cs=tinysrgb&w=600',
+            warm_filter: false,
+            stock: 25,
+            is_active: true,
+            sort_order: 3,
+          },
+        ]);
+      } else {
+        setProducts(data);
+      }
       setLoading(false);
     })();
     return () => { active = false; };
@@ -63,66 +102,39 @@ export function MenuSection() {
   );
 }
 
-/* --- BLUE-INSPIRED FEATURED SPOTLIGHT (Green colors, Green props) --- */
 function FeaturedSpotlight({ product, onAdd }: { product: Product; onAdd: () => void }) {
   return (
     <Reveal delay={120} className="mx-auto mt-12 max-w-5xl px-5 sm:px-8">
       <div className="relative flex flex-col md:flex-row gap-8 items-center bg-parchment/90 backdrop-blur-sm p-8 lg:p-12 shadow-soft border border-kraft-200 card-lift">
-        {/* Best Seller badge using Green's mustard */}
-        <div className="absolute -top-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center">
-          {/* Paper/Kraft background circle */}
-          <div className="h-20 w-20 rounded-full bg-kraft-200 shadow-lg border-2 border-espresso-800/30 flex items-center justify-center p-2 transform -rotate-3">
-            {/* Your transparent cookie icon */}
-            <img
-              src="https://res.cloudinary.com/mxabywb7/image/upload/v1785448063/cookie-removebg-preview_lxfjmp.png"
-              alt="Best Seller"
-              className="h-14 w-14 object-contain"
-            />
-          </div>
-
-          {/* Tiny "BEST SELLER" text tucked right under it */}
-          <span className="mt-1 bg-cream-100 px-3 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-espresso-800 border border-espresso-800/10 shadow-sm transform rotate-1">
-            Best Seller
-          </span>
+        <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-mustard-500 text-espresso-900 px-6 py-2 font-bold uppercase tracking-wider text-sm z-10 shadow-press">
+          Best Seller
         </div>
-
-        {/* Image side */}
         <div className="w-full md:w-1/2 relative overflow-hidden">
-          <img
-            src={product.image}
-            alt={product.name}
-            loading="lazy"
-            className="w-full h-auto object-cover shadow-soft"
+          <img 
+            src={product.image} 
+            alt={product.name} 
+            loading="lazy" 
+            className="w-full h-auto object-cover shadow-soft" 
           />
-          {/* Steam wisps from Green */}
-          <div className="pointer-events-none absolute top-0 left-[20%] h-20 w-32">
-            <span className="steam" />
-            <span className="steam" />
-            <span className="steam" />
-          </div>
         </div>
-
-        {/* Text side */}
         <div className="w-full md:w-1/2 space-y-4">
           <span className="text-sage-600 font-bold uppercase tracking-[0.25em] text-xs">The Spotlight</span>
           <h3 className="font-display text-4xl lg:text-5xl text-espresso-800 font-bold">
             {product.name}
           </h3>
           <p className="text-espresso-600 text-lg leading-relaxed">{product.description}</p>
-
           <div className="flex flex-wrap items-center gap-4 mt-2">
             <span className="bg-kraft-200 px-4 py-2 font-receipt text-xl font-extrabold text-espresso-900 shadow-press">
               {formatPeso(Number(product.price))}
             </span>
-            <button
-              type="button"
-              onClick={onAdd}
+            <button 
+              type="button" 
+              onClick={onAdd} 
               className="inline-flex items-center justify-center gap-2 bg-sage-500 px-6 py-3 font-bold text-white transition-all duration-300 shadow-press hover:bg-sage-600 hover:-translate-y-px active:translate-y-1"
             >
               Add to basket <Plus className="h-4 w-4" />
             </button>
           </div>
-
           {product.stock <= 5 && product.stock > 0 && (
             <p className="flex items-center gap-1.5 text-xs font-bold text-mustard-700 mt-2">
               <ScoreSlash className="h-3.5 w-3.5" /> Only {product.stock} left!
@@ -134,7 +146,6 @@ function FeaturedSpotlight({ product, onAdd }: { product: Product; onAdd: () => 
   );
 }
 
-/* --- ORIGINAL GREEN MENU CARD (Kept as-is) --- */
 function MenuCard({ product, index, onAdd }: { product: Product; index: number; onAdd: () => void }) {
   const soldOut = product.stock <= 0;
   return (

@@ -111,7 +111,7 @@ export function Navbar({ page, onNavigate }: NavbarProps) {
         </div>
       </div>
 
-      {/* MOBILE DROPDOWN - FIXED: changed md:hidden to sm:hidden */}
+      {/* MOBILE DROPDOWN - FIXED: changed md:hidden to sm:hiden */}
       {open && (
         <div className="sm:hidden border-t border-kraft-300/60 bg-cream-100/95 px-5 pb-5 pt-3 backdrop-blur-md">
           <ul className="space-y-1">

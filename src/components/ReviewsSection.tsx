@@ -67,7 +67,6 @@ export function ReviewsSection() {
       loadReviews();
     }
   };
-
   return (
     <section id="reviews" className="relative bg-cream-200 py-20 sm:py-28">
       <Reveal className="mx-auto max-w-6xl px-5 sm:px-8">

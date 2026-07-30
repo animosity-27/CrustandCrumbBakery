@@ -66,7 +66,6 @@ export function ContactSection({ onOrder }: { onOrder: () => void }) {
               </a>
             </div>
           </div>
-
           <div className="relative mt-10 grid gap-6 sm:grid-cols-2">
             <form onSubmit={submit} className="cc-card scoring-top bg-cream-100 p-5 shadow-soft ring-1 ring-kraft-300/60">
               <p className="slash-accent text-xs font-extrabold uppercase tracking-wider text-espresso-700">Send us a note</p>

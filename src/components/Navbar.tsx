@@ -61,12 +61,11 @@ export function Navbar({ page, onNavigate }: NavbarProps) {
   };
 
   return (
-    <header className={`relative inset-x-0 top-0 z-40 transition-all duration-300 ${scrolled ? 'bg-cream-100/90 backdrop-blur-md shadow-soft' : 'bg-cream-100/60 backdrop-blur-sm'}`}>
-      
-      {/* TIGHT CONTAINER */}
+<header className={`relative inset-x-0 top-0 z-40 transition-all duration-300 ${scrolled ? 'bg-transparent backdrop-blur-md shadow-soft' : 'bg-transparent backdrop-blur-sm'}`}>
+      {/* CONTAINER */}
       <div className="mx-auto max-w-6xl px-5 py-2 sm:px-8 flex flex-col items-center justify-center">
         
-        {/* HUGE LOGO */}
+        {/* LOGO */}
         <button type="button" onClick={() => onNavigate('home')} className="flex items-center justify-center -mt-10 -mb-6">
           <img
             src="https://res.cloudinary.com/mxabywb7/image/upload/v1785447941/crustandcrumb3_xvxd6j.png"

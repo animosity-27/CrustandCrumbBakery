@@ -12,7 +12,7 @@ import { CartDrawer } from '@/components/CartDrawer';
 import { TrackOrder } from '@/components/TrackOrder';
 import { AdminLogin } from '@/components/AdminLogin';
 import { AdminDashboard } from '@/components/AdminDashboard';
-import { StickyCartBar } from '@/components/StickyCartBar'; // <--- ADDED THIS IMPORT
+import { StickyCartBar } from '@/components/StickyCartBar';
 
 type Page = 'home' | 'track' | 'admin-login' | 'admin';
 
@@ -78,7 +78,7 @@ function AppShell() {
   return (
     <>
       <Navbar page={page} onNavigate={(p) => setPage(p as Page)} />
-      <main>
+<main className="min-h-screen" style={{ background: 'radial-gradient(ellipse at 50% 0%, #fcf9f5 0%, #ede0d4 100%)' }}>
         <Hero onOrder={goOrder} />
         <Ticker />
         <MenuSection />
@@ -87,9 +87,9 @@ function AppShell() {
       </main>
       <Footer onAdmin={() => setPage('admin-login')} />
       <CartDrawer />
-      
+
       {/* <--- ADDED THIS LINE RIGHT HERE */}
-      <StickyCartBar /> 
+      <StickyCartBar />
     </>
   );
 }

@@ -54,7 +54,7 @@ export function ContactSection({ onOrder }: { onOrder: () => void }) {
             <div className="cc-card scoring-top bg-cream-100 p-5 text-center shadow-soft ring-1 ring-kraft-300/60">
               <MapPin className="mx-auto h-6 w-6 text-sage-600" />
               <p className="mt-2 text-xs font-extrabold uppercase tracking-wider text-espresso-700">Location</p>
-              <p className="mt-1 font-display text-lg font-bold text-espresso-800">BPP Laboratory</p>
+              <p className="mt-1 font-display text-lg font-bold text-espresso-800">12-Gold</p>
               <p className="mt-1 text-xs text-espresso-600">Bring your own container — we love less waste.</p>
             </div>
             <div className="cc-card scoring-top bg-cream-100 p-5 text-center shadow-soft ring-1 ring-kraft-300/60">
@@ -62,7 +62,7 @@ export function ContactSection({ onOrder }: { onOrder: () => void }) {
               <p className="mt-2 text-xs font-extrabold uppercase tracking-wider text-espresso-700">Reach Us</p>
               <p className="mt-1 font-receipt font-bold text-espresso-800">0917 821 4455</p>
               <a href="https://wa.me/639178214455" target="_blank" rel="noopener noreferrer" className="mt-1 inline-flex items-center gap-1 text-xs font-bold text-sage-600 hover:text-sage-700">
-                <MessageCircle className="h-3.5 w-3.5" /> Chat on WhatsApp
+                <MessageCircle className="h-3.5 w-3.5" /> Reach us through our contact number above.
               </a>
             </div>
           </div>

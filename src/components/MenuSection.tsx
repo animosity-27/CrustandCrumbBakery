@@ -28,7 +28,7 @@ export function MenuSection() {
             name: 'Cream Cheese Garlic Brioche',
             description: 'Golden, buttery brioche stuffed with gooey cream cheese, topped with savory garlic butter and fresh parsley.',
             price: 120,
-            image: 'https://images.pexels.com/photos/14841924/pexels-photo-14841924.jpeg?auto=compress&cs=tinysrgb&w=600',
+            image: 'https://res.cloudinary.com/mxabywb7/image/upload/v1785455580/346155078_789048169485930_2229338423857853064_n_duiyyi.jpg',
             warm_filter: true,
             stock: 20,
             is_active: true,
@@ -39,7 +39,7 @@ export function MenuSection() {
             name: 'Choco Banana Bread',
             description: 'Rich, moist banana bread loaded with dark chocolate chunks and ripe bananas.',
             price: 100,
-            image: 'https://images.pexels.com/photos/2057311/pexels-photo-2057311.jpeg?auto=compress&cs=tinysrgb&w=600',
+            image: 'https://res.cloudinary.com/mxabywb7/image/upload/v1785455580/758480124_2098362501103201_1744164549062994860_n_ekipxh.jpg',
             warm_filter: false,
             stock: 15,
             is_active: true,
@@ -50,7 +50,7 @@ export function MenuSection() {
             name: 'Fudgy Brownies',
             description: 'Deep, dark chocolate brownies with a crackly top and gooey center, finished with sea salt.',
             price: 90,
-            image: 'https://images.pexels.com/photos/1854677/pexels-photo-1854677.jpeg?auto=compress&cs=tinysrgb&w=600',
+            image: 'https://res.cloudinary.com/mxabywb7/image/upload/v1785455580/346155093_785142339664383_4840433167330828553_n_edzxth.jpg',
             warm_filter: false,
             stock: 25,
             is_active: true,
@@ -145,6 +145,7 @@ function FeaturedSpotlight({ product, onAdd }: { product: Product; onAdd: () => 
     </Reveal>
   );
 }
+
 function MenuCard({ product, index, onAdd }: { product: Product; index: number; onAdd: () => void }) {
   const soldOut = product.stock <= 0;
   return (

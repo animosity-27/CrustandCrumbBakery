@@ -34,8 +34,6 @@ export function CartDrawer() {
     }
   }, [isOpen]);
 
-  if (!isOpen && !closing) return null;
-
   const placeOrder = async () => {
     if (!name.trim() || !contact.trim()) { 
       setError('Please add your name and contact so we can reach you.'); 

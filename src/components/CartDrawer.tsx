@@ -16,11 +16,12 @@ export function CartDrawer() {
   const [order, setOrder] = useState<Order | null>(null);
   const [closing, setClosing] = useState(false);
 
+  // 🛑 SCROLL LOCK REMOVED ENTIRELY - Page will never freeze
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      // We do NOT lock document.body. We let the page scroll naturally.
     } else {
-      document.body.style.overflow = '';
+      // Nothing to unlock.
     }
   }, [isOpen]);
 

@@ -86,7 +86,7 @@ export function StickyCartBar() {
 
   return (
     <div 
-      className={`fixed bottom-8 right-6 z-[9999] transition-all duration-300 ease-in-out ${translateClass}`}
+className={`fixed bottom-8 right-6 z-[9999] transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 ${translateClass}`}
     >
       <button
         onClick={handleOpenDrawer}

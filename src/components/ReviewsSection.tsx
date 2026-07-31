@@ -133,8 +133,8 @@ export function ReviewsSection() {
             </div>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2">
-              {reviews.map((r, i) => (
-                <Reveal key={r.id} delay={i * 80} className="cc-card scoring-top relative bg-white/70 p-5 shadow-soft ring-1 ring-kraft-300/60">
+              {reviews.map((r, i) => (<Reveal key={r.id} delay={i * 80} className="cc-card scoring-top relative bg-white/70 p-5 shadow-soft ring-1 ring-kraft-300/60 transition-all duration-500 hover:shadow-card hover:scale-[1.02] active:scale-[0.98]">
+                
                   <div className="flex items-center justify-between">
                     <StarRating value={r.rating} size={15} />
                     <span className="font-receipt text-[11px] font-bold text-espresso-500">{new Date(r.created_at).toLocaleDateString('en-PH', { month: 'short', day: 'numeric' })}</span>

@@ -79,7 +79,7 @@ export function Navbar({ page, onNavigate }: NavbarProps) {
           <ul className="hidden md:flex items-center gap-24">
             {links.map((l) => (
               <li key={l.label}>
-                <button type="button" onClick={() => handleLink(l.href, l.page)} className="nav-link text-base font-bold text-espresso-700 transition-colors hover:text-sage-600">{l.label}</button>
+<button type="button" onClick={() => handleLink(l.href, l.page)} className="nav-link text-base font-bold text-espresso-700 transition-all duration-200 hover:text-sage-600 hover:scale-105 active:scale-95">{l.label}</button>
               </li>
             ))}
           </ul>

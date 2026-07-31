@@ -36,7 +36,6 @@ export function AdminDashboard({ onExit }: AdminDashboardProps) {
     await signOut();
     onExit();
   };
-
   const tabs: { id: Tab; label: string; icon: typeof LayoutDashboard }[] = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
     { id: 'orders', label: 'Orders', icon: Package },
@@ -98,10 +97,12 @@ export function AdminDashboard({ onExit }: AdminDashboardProps) {
       </header>
 
       <main className="mx-auto max-w-7xl px-5 py-8 sm:px-8">
-        {tab === 'overview' && <Overview stats={stats} loading={loadingStats} onRefresh={loadStats} />}
-        {tab === 'orders' && <OrdersManager />}
-        {tab === 'inventory' && <InventoryManager />}
-        {tab === 'reviews' && <ReviewsManager />}
+        <div className="transition-all duration-500 ease-in-out animate-fadeInUp">
+          {tab === 'overview' && <Overview stats={stats} loading={loadingStats} onRefresh={loadStats} />}
+          {tab === 'orders' && <OrdersManager />}
+          {tab === 'inventory' && <InventoryManager />}
+          {tab === 'reviews' && <ReviewsManager />}
+        </div>
       </main>
     </div>
   );
@@ -153,7 +154,6 @@ function Overview({
           <RefreshCw className="h-4 w-4" /> Refresh
         </button>
       </div>
-
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((c, i) => {
           const Icon = c.icon;

@@ -86,13 +86,29 @@ export function CartDrawer() {
         onClick={() => handleClose()}
       />
 
+      {/* ✅ BASKET SHAPE - CLIPPED TOP CORNERS + HANDLE GROOVE */}
       <aside
-        className={`relative flex h-full w-full max-w-md flex-col bg-cream-100 shadow-2xl transition-transform duration-300 ease-in-out ${closing ? 'translate-y-full' : 'translate-y-0'
-          }`}
+        className={`relative flex h-full w-full max-w-md flex-col bg-parchment shadow-2xl transition-transform duration-300 ease-in-out ${closing ? 'translate-y-full' : 'translate-y-0'}
+          `}
+        style={{
+          clipPath: 'polygon(0% 0%, 90% 0%, 100% 8%, 100% 100%, 0% 100%)',
+          borderLeft: '3px solid #ede0d4',
+          boxShadow: '-12px 0 40px -12px rgba(62, 39, 35, 0.35)'
+        }}
       >
-        <div className="flex-shrink-0 flex items-center justify-between border-b border-kraft-300/60 px-5 py-4">
+        {/* BASKET HANDLE GROOVE (woven look) */}
+        <div className="absolute top-0 right-0 h-3 w-8 bg-kraft-200 border-b-2 border-kraft-300/60 rounded-bl-full z-10" style={{ transform: 'translateY(-6px) skewX(-10deg)' }} />
+
+        {/* Header with bakery scoring accent */}
+        <div className="scoring-top flex-shrink-0 flex items-center justify-between border-b-2 border-kraft-300/60 px-5 py-4 bg-cream-100/80">
           <div className="flex items-center gap-2">
-            <ShoppingBag className="h-5 w-5 text-sage-600" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-kraft-200 border border-espresso-800/20 transform -rotate-3">
+              <img 
+                src="https://res.cloudinary.com/mxabywb7/image/upload/v1785448063/cookie-removebg-preview_lxfjmp.png" 
+                alt="Cart" 
+                className="h-5 w-5 object-contain" 
+              />
+            </div>
             <h2 className="font-display text-lg font-extrabold text-espresso-800">
               {stage === 'success' ? 'Order Confirmed' : stage === 'checkout' ? 'Checkout' : 'Your Basket'}
             </h2>
@@ -105,7 +121,7 @@ export function CartDrawer() {
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-5 py-4">
+        <div className="flex-1 overflow-y-auto px-5 py-4 bg-parchment/50">
           {stage === 'success' && order && (
             <SuccessView
               order={order}
@@ -119,7 +135,13 @@ export function CartDrawer() {
             <>
               {items.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-20 text-center">
-                  <ShoppingBag className="h-12 w-12 text-kraft-400" />
+                  <div className="h-20 w-20 rounded-full bg-kraft-200 border-2 border-espresso-800/20 flex items-center justify-center transform -rotate-3 shadow-sm">
+                    <img 
+                      src="https://res.cloudinary.com/mxabywb7/image/upload/v1785448063/cookie-removebg-preview_lxfjmp.png" 
+                      alt="Empty basket" 
+                      className="h-12 w-12 object-contain" 
+                    />
+                  </div>
                   <p className="mt-4 font-display text-lg text-espresso-700">Your basket is empty</p>
                   <p className="mt-1 text-sm text-espresso-500">Add some freshly baked goodness!</p>
                   <button
@@ -138,7 +160,7 @@ export function CartDrawer() {
               ) : (
                 <ul className="space-y-3">
                   {items.map((item) => (
-                    <li key={item.product_id} className="cc-card scoring-top flex gap-3 bg-white/70 p-3 shadow-soft ring-1 ring-kraft-300/50">
+                    <li key={item.product_id} className="cc-card scoring-top flex gap-3 bg-white/80 p-3 shadow-soft ring-1 ring-kraft-300/50">
                       <img src={item.image} alt={item.name} className="h-16 w-16 flex-shrink-0 object-cover" />
                       <div className="flex flex-1 flex-col">
                         <p className="text-sm font-bold text-espresso-800">{item.name}</p>
@@ -185,7 +207,7 @@ export function CartDrawer() {
                 </div>
               </Field>
               <Field label="Note (optional)"><textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="Allergies, special requests…" rows={2} className="cc-input resize-none" /></Field>
-              <div className="cc-card scoring-top bg-white/70 p-4 ring-1 ring-kraft-300/50">
+              <div className="cc-card scoring-top bg-white/80 p-4 ring-1 ring-kraft-300/50">
                 <p className="text-xs font-extrabold uppercase tracking-wider text-espresso-700">Order Summary</p>
                 <ul className="mt-2 space-y-1">
                   {items.map((i) => (
@@ -201,7 +223,7 @@ export function CartDrawer() {
         </div>
 
         {stage !== 'success' && items.length > 0 && (
-          <div className="flex-shrink-0 border-t border-kraft-300/60 px-5 py-4">
+          <div className="flex-shrink-0 border-t-2 border-kraft-300/60 px-5 py-4 bg-cream-100/80">
             {error && <p className="mb-3 bg-red-100 px-4 py-2.5 text-sm font-bold text-red-700">{error}</p>}
             <div className="mb-3 flex items-center justify-between">
               <span className="text-sm font-bold text-espresso-600">Subtotal</span>

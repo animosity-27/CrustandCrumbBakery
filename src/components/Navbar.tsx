@@ -46,57 +46,81 @@ export function Navbar({ page, onNavigate }: NavbarProps) {
   const handleOpenCart = () => {
     if (page !== 'home') {
       onNavigate('home');
-      setTimeout(() => {
-        openCart();
-        window.dispatchEvent(new Event('open-cart-drawer'));
-      }, 100);
+      setTimeout(() => openCart(), 100);
     } else {
       openCart();
-      window.dispatchEvent(new Event('open-cart-drawer'));
     }
   };
 
   return (
     <header className={`relative inset-x-0 top-0 z-40 transition-all duration-300 ${scrolled ? 'bg-cream-100/90 backdrop-blur-md shadow-soft' : 'bg-cream-100/60 backdrop-blur-sm'}`}>
       
-      {/* SINGLE HORIZONTAL ROW - This fixes the layout collapse */}
-      <div className="mx-auto max-w-6xl px-5 py-3 sm:px-8 flex flex-row items-center justify-between">
+      <div className="mx-auto max-w-6xl px-0 py-2 sm:px-8 flex flex-col items-center justify-center gap-4">
         
-        {/* LOGO */}
+        {/* ✅ LOGO - CENTERED PERFECTLY */}
         <button type="button" onClick={() => onNavigate('home')} className="flex items-center justify-center">
           <img
             src="https://res.cloudinary.com/mxabywb7/image/upload/v1785447941/crustandcrumb3_xvxd6j.png"
             alt="Crust & Crumb"
-            className="h-16 w-auto object-contain hover:scale-105 transition-transform duration-300"
+            className="h-48 w-auto object-contain hover:scale-105 transition-transform duration-300"
           />
         </button>
 
-        {/* DESKTOP LINKS */}
-        <ul className="hidden md:flex items-center gap-8">
-          {links.map((l) => (
-            <li key={l.label}>
-              <button type="button" onClick={() => handleLink(l.href, l.page)} className="nav-link text-base font-bold text-espresso-700 transition-all duration-200 hover:text-sage-600 hover:scale-105 active:scale-95">{l.label}</button>
-            </li>
-          ))}
-        </ul>
+        {/* ✅ BUTTONS - DIRECTLY BELOW, CENTERED */}
+        <div className="flex flex-wrap items-center justify-center gap-6 mt-1">
+          
+          {/* Left Side: Navigation Links */}
+          <ul className="flex items-center gap-8">
+            {links.map((l) => (
+              <li key={l.label}>
+                <button type="button" onClick={() => handleLink(l.href, l.page)} className="nav-link text-base font-bold text-espresso-700 transition-all duration-200 hover:text-sage-600 hover:scale-105 active:scale-95">{l.label}</button>
+              </li>
+            ))}
+          </ul>
 
-        {/* ACTION BUTTONS */}
-        <div className="flex items-center gap-4">
-          <button type="button" onClick={() => onNavigate('track')} className="flex h-10 w-10 place-items-center text-espresso-700 transition-all duration-200 hover:bg-kraft-200/70 hover:scale-105 active:scale-95" aria-label="Track order">
-            <PackageSearch className="h-5 w-5" />
-          </button>
-          <button type="button" onClick={handleOpenCart} className={`relative flex h-10 w-10 place-items-center text-espresso-700 transition-all duration-200 hover:bg-kraft-200/70 hover:scale-105 active:scale-95 ${bump ? 'animate-bob' : ''}`} aria-label="Open cart">
-            <ShoppingBag className="h-5 w-5" />
-            {count > 0 && (
-              <span className="cc-notch animate-popIn absolute -right-1 -top-1 grid h-5 min-w-[20px] place-items-center bg-mustard-500 px-1 font-receipt text-[11px] font-extrabold text-espresso-900 ring-2 ring-cream-100">{count}</span>
-            )}
-          </button>
-          <button type="button" onClick={handleOpenCart} className="flex bg-sage-500 px-5 py-2.5 text-sm font-bold text-white transition-all duration-200 hover:bg-sage-600 hover:scale-105 active:scale-95">
-            Order Now
-          </button>
-          <button type="button" onClick={() => setOpen((v) => !v)} className="flex h-10 w-10 place-items-center text-espresso-700 hover:bg-kraft-200/70 md:hidden">
-            {open ? <X className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
-          </button>
+          {/* Divider Line */}
+          <span className="hidden sm:block h-6 w-px bg-kraft-300/60" />
+
+          {/* Right Side: Action Buttons */}
+          <div className="flex items-center gap-4">
+            <button 
+              type="button" 
+              onClick={() => onNavigate('track')} 
+              className="flex h-10 w-10 place-items-center text-espresso-700 transition-all duration-200 hover:bg-kraft-200/70 hover:scale-105 active:scale-95" 
+              aria-label="Track order"
+            >
+              <PackageSearch className="h-5 w-5" />
+            </button>
+            
+            <button 
+              type="button" 
+              onClick={handleOpenCart} 
+              className={`relative flex h-10 w-10 place-items-center text-espresso-700 transition-all duration-200 hover:bg-kraft-200/70 hover:scale-105 active:scale-95 ${bump ? 'animate-bob' : ''}`} 
+              aria-label="Open cart"
+            >
+              <ShoppingBag className="h-5 w-5" />
+              {count > 0 && (
+                <span className="cc-notch animate-popIn absolute -right-1 -top-1 grid h-5 min-w-[20px] place-items-center bg-mustard-500 px-1 font-receipt text-[11px] font-extrabold text-espresso-900 ring-2 ring-cream-100">{count}</span>
+              )}
+            </button>
+
+            <button 
+              type="button" 
+              onClick={handleOpenCart} 
+              className="flex bg-sage-500 px-5 py-2.5 text-sm font-bold text-white transition-all duration-200 hover:bg-sage-600 hover:scale-105 active:scale-95"
+            >
+              Order Now
+            </button>
+
+            {/* Mobile Hamburger */}
+            <button 
+              type="button" 
+              onClick={() => setOpen((v) => !v)} 
+              className="flex h-10 w-10 place-items-center text-espresso-700 hover:bg-kraft-200/70 md:hidden"
+            >
+              {open ? <X className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
       </div>
 

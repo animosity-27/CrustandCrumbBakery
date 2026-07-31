@@ -6,13 +6,13 @@ export function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
-    // Create audio element once
-    const audio = new Audio('/bg-music.mp3');
+    // Replace this URL with a direct download link to the song
+    // (You can upload the song to Imgur or Cloudinary and paste the link here)
+    const audio = new Audio('hev.mp3');
     audio.loop = true;
-    audio.volume = 0.3; // 30% volume — not too loud
+    audio.volume = 0.3;
     audioRef.current = audio;
 
-    // Try to resume if user clicks anywhere (helps bypass browser autoplay block)
     const resume = () => {
       if (audioRef.current && !isPlaying) {
         audioRef.current.play().catch(() => {});

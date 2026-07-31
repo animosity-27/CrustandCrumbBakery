@@ -59,20 +59,20 @@ export function Navbar({ page, onNavigate }: NavbarProps) {
   return (
     <header className={`relative inset-x-0 top-0 z-40 transition-all duration-300 ${scrolled ? 'bg-cream-100/90 backdrop-blur-md shadow-soft' : 'bg-cream-100/60 backdrop-blur-sm'}`}>
       
-      {/* ✅ HORIZONTAL CONTAINER (Fixes the white void) */}
-      <div className="mx-auto max-w-6xl px-5 py-3 sm:px-8 flex flex-col md:flex-row items-center justify-between gap-3">
+      {/* SINGLE HORIZONTAL ROW - This fixes the layout collapse */}
+      <div className="mx-auto max-w-6xl px-5 py-3 sm:px-8 flex flex-row items-center justify-between">
         
         {/* LOGO */}
         <button type="button" onClick={() => onNavigate('home')} className="flex items-center justify-center">
           <img
             src="https://res.cloudinary.com/mxabywb7/image/upload/v1785447941/crustandcrumb3_xvxd6j.png"
             alt="Crust & Crumb"
-            className="h-24 md:h-32 w-auto object-contain hover:scale-105 transition-transform duration-300"
+            className="h-16 w-auto object-contain hover:scale-105 transition-transform duration-300"
           />
         </button>
 
-        {/* DESKTOP MENU LINKS - Centered horizontally */}
-        <ul className="hidden md:flex items-center gap-10">
+        {/* DESKTOP LINKS */}
+        <ul className="hidden md:flex items-center gap-8">
           {links.map((l) => (
             <li key={l.label}>
               <button type="button" onClick={() => handleLink(l.href, l.page)} className="nav-link text-base font-bold text-espresso-700 transition-all duration-200 hover:text-sage-600 hover:scale-105 active:scale-95">{l.label}</button>
@@ -80,54 +80,27 @@ export function Navbar({ page, onNavigate }: NavbarProps) {
           ))}
         </ul>
 
-        {/* ACTION BUTTONS - Right aligned */}
-        <div className="flex items-center gap-3">
-          
-          {/* TRACK ORDER */}
-          <button 
-            type="button" 
-            onClick={() => onNavigate('track')} 
-            className="flex h-10 w-10 place-items-center text-espresso-700 transition-colors hover:bg-kraft-200/70" 
-            aria-label="Track order"
-          >
+        {/* ACTION BUTTONS */}
+        <div className="flex items-center gap-4">
+          <button type="button" onClick={() => onNavigate('track')} className="flex h-10 w-10 place-items-center text-espresso-700 transition-all duration-200 hover:bg-kraft-200/70 hover:scale-105 active:scale-95" aria-label="Track order">
             <PackageSearch className="h-5 w-5" />
           </button>
-          
-          {/* BASKET BUTTON */}
-          <button 
-            type="button" 
-            onClick={handleOpenCart} 
-            className={`relative flex h-10 w-10 place-items-center text-espresso-700 transition-colors hover:bg-kraft-200/70 ${bump ? 'animate-bob' : ''}`} 
-            aria-label="Open cart"
-          >
+          <button type="button" onClick={handleOpenCart} className={`relative flex h-10 w-10 place-items-center text-espresso-700 transition-all duration-200 hover:bg-kraft-200/70 hover:scale-105 active:scale-95 ${bump ? 'animate-bob' : ''}`} aria-label="Open cart">
             <ShoppingBag className="h-5 w-5" />
             {count > 0 && (
               <span className="cc-notch animate-popIn absolute -right-1 -top-1 grid h-5 min-w-[20px] place-items-center bg-mustard-500 px-1 font-receipt text-[11px] font-extrabold text-espresso-900 ring-2 ring-cream-100">{count}</span>
             )}
           </button>
-
-          {/* ORDER NOW */}
-          <button 
-            type="button" 
-            onClick={handleOpenCart} 
-            className="flex bg-sage-500 px-5 py-2.5 text-sm font-bold text-white hover:bg-sage-600 transition-colors"
-          >
+          <button type="button" onClick={handleOpenCart} className="flex bg-sage-500 px-5 py-2.5 text-sm font-bold text-white transition-all duration-200 hover:bg-sage-600 hover:scale-105 active:scale-95">
             Order Now
           </button>
-
-          {/* HAMBURGER MENU (Mobile only) */}
-          <button 
-            type="button" 
-            onClick={() => setOpen((v) => !v)} 
-            className="flex h-10 w-10 place-items-center text-espresso-700 hover:bg-kraft-200/70 md:hidden" 
-            aria-label="Toggle menu"
-          >
+          <button type="button" onClick={() => setOpen((v) => !v)} className="flex h-10 w-10 place-items-center text-espresso-700 hover:bg-kraft-200/70 md:hidden">
             {open ? <X className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
           </button>
         </div>
       </div>
 
-      {/* MOBILE DROPDOWN MENU */}
+      {/* MOBILE DROPDOWN */}
       {open && (
         <div className="md:hidden border-t border-kraft-300/60 bg-cream-100/95 px-5 pb-5 pt-3 backdrop-blur-md">
           <ul className="space-y-1">

@@ -6,22 +6,25 @@ export function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
-    // Replace this URL with a direct download link to the song
-    // (You can upload the song to Imgur or Cloudinary and paste the link here)
-    const audio = new Audio('hev.mp3');
+    // Create the audio element once
+    const audio = new Audio('/bg-music.mp3');
     audio.loop = true;
-    audio.volume = 0.3;
+    audio.volume = 0.25; // comfortable background volume
     audioRef.current = audio;
 
-    const resume = () => {
+    // Try to auto-play after user interaction (browsers block autoplay)
+    const handleInteraction = () => {
       if (audioRef.current && !isPlaying) {
         audioRef.current.play().catch(() => {});
+        setIsPlaying(true);
       }
     };
-    document.addEventListener('click', resume);
 
+    document.addEventListener('click', handleInteraction);
+    
+    // Cleanup when component unmounts
     return () => {
-      document.removeEventListener('click', resume);
+      document.removeEventListener('click', handleInteraction);
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.src = '';
@@ -29,8 +32,9 @@ export function MusicPlayer() {
     };
   }, []);
 
-  const toggle = () => {
+  const toggleMusic = () => {
     if (!audioRef.current) return;
+    
     if (isPlaying) {
       audioRef.current.pause();
       setIsPlaying(false);
@@ -42,10 +46,9 @@ export function MusicPlayer() {
 
   return (
     <button
-      onClick={toggle}
-      className="fixed bottom-4 left-4 z-[9999] flex h-12 w-12 items-center justify-center rounded-full bg-cream-100/90 backdrop-blur-md border border-kraft-300/60 shadow-lg hover:scale-105 transition-all duration-200"
+      onClick={toggleMusic}
+      className="fixed bottom-5 left-5 z-[9999] flex h-12 w-12 items-center justify-center rounded-full bg-cream-100/90 backdrop-blur-md border border-kraft-300/60 shadow-lg hover:scale-105 transition-all duration-200"
       aria-label="Toggle background music"
-      title={isPlaying ? 'Pause music' : 'Play music'}
     >
       {isPlaying ? (
         <Volume2 className="h-5 w-5 text-espresso-800" />

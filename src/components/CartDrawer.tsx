@@ -16,7 +16,7 @@ export function CartDrawer() {
   const [order, setOrder] = useState<Order | null>(null);
   const [closing, setClosing] = useState(false);
 
-  // LOCK SCROLL WHEN OPEN
+  // 1. LOCK SCROLL WHEN OPEN
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -26,17 +26,14 @@ export function CartDrawer() {
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
-  // RESET STAGE ON OPEN
+  // 2. RESET STAGE WHEN CLOSED (not when opening)
   useEffect(() => {
-    if (isOpen) {
+    if (!isOpen) {
       setClosing(false);
-      setStage('cart');
-      setError(null);
-      setOrder(null);
     }
   }, [isOpen]);
 
-  // If not open and not closing, render nothing
+  // 3. RENDER NOTHING IF CLOSED
   if (!isOpen && !closing) return null;
 
   const placeOrder = async () => {

@@ -25,15 +25,6 @@ export function CartDrawer() {
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
-  useEffect(() => {
-    if (isOpen) {
-      setClosing(false);
-      setStage('cart');
-      setError(null);
-      setOrder(null);
-    }
-  }, [isOpen]);
-
   const placeOrder = async () => {
     if (!name.trim() || !contact.trim()) { 
       setError('Please add your name and contact so we can reach you.'); 

@@ -3,7 +3,7 @@ import { ShoppingBag } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 
 export function StickyCartBar() {
-  const { items, isOpen } = useCart();
+  const { items, isOpen, openCart } = useCart(); // ✅ Imported openCart directly
   const [visible, setVisible] = useState(false);
   const [isSlidingDown, setIsSlidingDown] = useState(false);
   const [isEntering, setIsEntering] = useState(false);
@@ -38,15 +38,14 @@ export function StickyCartBar() {
       if (totalItems > 0) {
         if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
 
-        // Wait 300ms for the drawer to fully go away, THEN slide up
         closeTimeoutRef.current = setTimeout(() => {
           if (!isOpen && totalItems > 0) {
             setVisible(true);
             setIsSlidingDown(false);
-            setIsEntering(true); // Start hidden at the bottom
+            setIsEntering(true);
 
             enterTimeoutRef.current = setTimeout(() => {
-              setIsEntering(false); // Triggers slide-up animation
+              setIsEntering(false);
             }, 10);
           }
         }, 300);
@@ -60,13 +59,11 @@ export function StickyCartBar() {
   if (totalItems === 0 || isOpen || !visible) return null;
 
   const handleOpenDrawer = () => {
-    // 1. Slide down immediately
     setIsSlidingDown(true);
 
-    // 2. Wait 10ms for slide animation, THEN open drawer
     setTimeout(() => {
-      setVisible(false); // Hide completely after animation
-      window.dispatchEvent(new Event('open-cart-drawer'));
+      setVisible(false);
+      openCart(); // ✅ Directly calls the context function. Guaranteed to open.
     }, 10);
   };
 

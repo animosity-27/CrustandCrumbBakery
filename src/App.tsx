@@ -22,7 +22,6 @@ function AppShell() {
   const [trackCode, setTrackCode] = useState<string | undefined>(undefined);
   const { session, loading } = useAdmin();
 
-  // Resolve admin page: show login if not signed in, dashboard if signed in
   useEffect(() => {
     if (page === 'admin-login' && !loading && session) {
       setPage('admin');
@@ -32,7 +31,6 @@ function AppShell() {
     }
   }, [page, session, loading]);
 
-  // Listen for "track my order" events from the cart success screen
   useEffect(() => {
     const handler = (e: Event) => {
       const code = (e as CustomEvent<string>).detail;
@@ -56,7 +54,6 @@ function AppShell() {
     document.querySelector('#menu')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Admin routes render full-screen, no storefront chrome
   if (page === 'admin-login' || page === 'admin') {
     if (loading) return null;
     if (page === 'admin' && session) {
@@ -67,22 +64,19 @@ function AppShell() {
 
   if (page === 'track') {
     return (
-      <>
+      <div className="animate-fadeInUp transition-all duration-500 ease-in-out">
         <Navbar page={page} onNavigate={(p) => setPage(p as Page)} />
         <TrackOrder initialCode={trackCode} onBack={() => setPage('home')} />
         <Footer onAdmin={() => setPage('admin-login')} />
-      </>
+      </div>
     );
   }
-  // home
+
   return (
     <>
-      {/* 1. LOADING SCREEN AT THE VERY TOP */}
       <LoadingScreen />
-      
       <Navbar page={page} onNavigate={(p) => setPage(p as Page)} />
       
-      {/* 2. PAGE TRANSITION WRAPPER - Fades in with slide */}
       <div className="animate-on-load">
         <div className="transition-all duration-500 ease-in-out animate-fadeInUp">
           <main className="min-h-screen" style={{ background: 'radial-gradient(ellipse at 50% 0%, #fcf9f5 0%, #ede0d4 100%)' }}>
@@ -93,10 +87,12 @@ function AppShell() {
             <ContactSection onOrder={goOrder} />
           </main>
           <Footer onAdmin={() => setPage('admin-login')} />
-          <CartDrawer />
-          <StickyCartBar />
         </div>
       </div>
+
+      {/* MOVED OUTSIDE THE WRAPPER SO IT NEVER GETS BLOCKED */}
+      <CartDrawer />
+      <StickyCartBar />
     </>
   );
 }

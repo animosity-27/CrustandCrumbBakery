@@ -63,11 +63,11 @@ export function StickyCartBar() {
     // 1. Slide down immediately
     setIsSlidingDown(true);
 
-    // 2. Wait 300ms for slide animation, THEN open drawer
+    // 2. Wait 10ms for the CSS to start, THEN open drawer immediately
     setTimeout(() => {
-      setVisible(false); // Hide completely after animation
+      setVisible(false);
       window.dispatchEvent(new Event('open-cart-drawer'));
-    }, 300);
+    }, 10); // 🔥 CHANGED FROM 300ms TO 10ms
   };
 
   const translateClass = isSlidingDown 

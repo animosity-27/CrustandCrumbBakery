@@ -1,45 +1,25 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
 
 export function MusicPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  useEffect(() => {
-    // 1. Create the audio once
+  // Initialize audio ONCE when the component mounts
+  if (!audioRef.current) {
     const audio = new Audio('/bg-music.mp3');
     audio.loop = true;
-    audio.volume = 0.25;
+    audio.volume = 0.3;
     audioRef.current = audio;
-
-    // 2. Try to start playing after user clicks anywhere
-    const handleInteraction = () => {
-      if (audioRef.current && audioRef.current.paused) {
-        audioRef.current.play().catch(() => {});
-        setIsPlaying(true);
-      }
-    };
-
-    document.addEventListener('click', handleInteraction);
-
-    return () => {
-      document.removeEventListener('click', handleInteraction);
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.src = '';
-      }
-    };
-  }, []);
+  }
 
   const toggleMusic = () => {
     if (!audioRef.current) return;
 
     if (audioRef.current.paused) {
-      // If it's paused, play it
       audioRef.current.play().catch(() => {});
       setIsPlaying(true);
     } else {
-      // If it's playing, pause it
       audioRef.current.pause();
       setIsPlaying(false);
     }

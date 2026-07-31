@@ -215,6 +215,9 @@ function OrdersManager() {
   const [itemsByOrder, setItemsByOrder] = useState<Record<string, { product_name: string; price: number; quantity: number }[]>>({});
   const [searchTerm, setSearchTerm] = useState('');
 
+  // Delete confirmation state
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
   const load = useCallback(async () => {
     setLoading(true);
     let q = supabase.from('orders').select('*').order('created_at', { ascending: false });
@@ -250,9 +253,13 @@ function OrdersManager() {
     await supabase.from('orders').update({ paid }).eq('id', id);
   };
 
-  // ✅ NEW: Delete Order function
+  // Delete order without alert
+  const confirmDelete = (id: string) => {
+    setDeletingId(id);
+  };
+
   const deleteOrder = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this order? This cannot be undone.')) return;
+    setDeletingId(null);
     setOrders((prev) => prev.filter((o) => o.id !== id));
     await supabase.from('orders').delete().eq('id', id);
   };
@@ -399,15 +406,35 @@ function OrdersManager() {
                       </div>
                     </div>
 
-                    {/* ✅ NEW DELETE BUTTON */}
+                    {/* ✅ CLEAN DELETE CONFIRMATION (No alert) */}
                     <div className="mt-4 pt-4 border-t border-red-200/30">
-                      <button
-                        type="button"
-                        onClick={() => deleteOrder(o.id)}
-                        className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 hover:text-red-700 transition-colors"
-                      >
-                        <Trash2 className="h-4 w-4" /> Delete Order
-                      </button>
+                      {deletingId === o.id ? (
+                        <div className="flex items-center gap-3">
+                          <span className="text-sm font-bold text-red-700">Delete this order?</span>
+                          <button
+                            type="button"
+                            onClick={() => deleteOrder(o.id)}
+                            className="text-xs font-bold text-red-600 hover:text-red-800 transition-colors"
+                          >
+                            Yes, Delete
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setDeletingId(null)}
+                            className="text-xs font-bold text-espresso-600 hover:text-espresso-800 transition-colors"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => confirmDelete(o.id)}
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 hover:text-red-700 transition-colors"
+                        >
+                          <Trash2 className="h-4 w-4" /> Delete Order
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -648,9 +675,8 @@ function ReviewsManager() {
   };
 
   const remove = async (id: string) => {
-    if (!confirm('Delete this review? This cannot be undone.')) return;
-    await supabase.from('reviews').delete().eq('id', id);
     setReviews((prev) => prev.filter((r) => r.id !== id));
+    await supabase.from('reviews').delete().eq('id', id);
   };
 
   if (loading) {

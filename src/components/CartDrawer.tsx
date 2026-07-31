@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { X, Plus, Minus, Trash2, ShoppingBag, Loader2, CheckCircle2, ArrowRight, Banknote, Smartphone, QrCode, Upload } from 'lucide-react';
+import { X, Plus, Minus, Trash2, ShoppingBag, Loader2, CheckCircle2, ArrowRight, Banknote, Smartphone } from 'lucide-react';
 import { useCart } from '@/lib/cart';
 import { supabase, formatPeso, PICKUP_SLOTS, PAYMENT_LABELS, type PaymentMethod, type Order } from '@/lib/supabase';
 
@@ -189,12 +189,11 @@ export function CartDrawer() {
                 </div>
               </Field>
               <Field label="Payment method">
-                <div className="grid grid-cols-3 gap-2">
-                  {(['cash', 'gcash', 'qrph'] as PaymentMethod[]).map((m) => (
+                <div className="grid grid-cols-2 gap-2">
+                  {(['cash', 'gcash'] as PaymentMethod[]).map((m) => (
                     <button key={m} type="button" onClick={() => setPayment(m)} className={`flex flex-col items-center gap-1 border-2 px-2 py-3 text-xs font-bold transition-all ${payment === m ? 'border-mustard-500 bg-mustard-500/15 text-espresso-800' : 'border-kraft-300 bg-cream-100 text-espresso-600 hover:border-kraft-400'}`}>
                       {m === 'cash' && <Banknote className="h-5 w-5" />}
                       {m === 'gcash' && <Smartphone className="h-5 w-5" />}
-                      {m === 'qrph' && <QrCode className="h-5 w-5" />}
                       {PAYMENT_LABELS[m]}
                     </button>
                   ))}
@@ -269,15 +268,34 @@ function SuccessView({ order, payment, slot, onDone }: { order: Order; payment: 
 
       {payment !== 'cash' && (
         <div className="mt-4 w-full bg-cream-100 p-4 border border-kraft-300/50">
-          <p className="text-xs font-extrabold uppercase tracking-wider text-espresso-700">Pay via {PAYMENT_LABELS[payment]}</p>
-          <div className="mt-2 flex justify-center">
-            <img
-              src={payment === 'gcash' ? '/gcash-qr.png' : '/qrph-qr.png'}
-              alt={`${PAYMENT_LABELS[payment]} QR`}
-              className="h-32 w-32 object-contain border border-kraft-300/50"
-            />
+          <p className="text-xs font-extrabold uppercase tracking-wider text-espresso-700">
+            Pay via {PAYMENT_LABELS[payment]}
+          </p>
+          
+          <div className="mt-3 flex flex-col items-center gap-3">
+            <p className="text-sm text-espresso-600">
+              Send payment to:
+            </p>
+            <div className="flex items-center gap-3 bg-white px-5 py-3 border border-kraft-300/50 shadow-sm">
+              <span className="font-receipt text-xl font-bold text-espresso-900">
+                09600682231
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard.writeText('09600682231');
+                  alert('Number copied to clipboard!');
+                }}
+                className="text-xs font-bold text-sage-600 hover:text-sage-700 transition-colors"
+              >
+                Copy
+              </button>
+            </div>
+            
+            <p className="text-xs text-espresso-500 mt-1">
+              After payment, please send your order code via GChat or SMS.
+            </p>
           </div>
-          <p className="mt-2 text-xs text-espresso-600">Scan the QR to pay. Proof upload coming soon.</p>
         </div>
       )}
 

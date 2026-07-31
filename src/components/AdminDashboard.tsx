@@ -117,7 +117,15 @@ type AdminStats = {
   by_status: Record<string, number>;
 };
 
-function Overview({ stats, loading, onRefresh }: { stats: AdminStats | null; loading: boolean; onRefresh: () => void }) {
+function Overview({
+  stats,
+  loading,
+  onRefresh,
+}: {
+  stats: AdminStats | null;
+  loading: boolean;
+  onRefresh: () => void;
+}) {
   if (loading || !stats) {
     return <div className="flex justify-center py-20"><Loader2 className="h-8 w-8 animate-spin text-sage-500" /></div>;
   }
@@ -240,6 +248,13 @@ function OrdersManager() {
   const togglePaid = async (id: string, paid: boolean) => {
     setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, paid } : o)));
     await supabase.from('orders').update({ paid }).eq('id', id);
+  };
+
+  // ✅ NEW: Delete Order function
+  const deleteOrder = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this order? This cannot be undone.')) return;
+    setOrders((prev) => prev.filter((o) => o.id !== id));
+    await supabase.from('orders').delete().eq('id', id);
   };
 
   const filters: { id: OrderStatus | 'all'; label: string }[] = [
@@ -382,6 +397,17 @@ function OrdersManager() {
                           {o.paid ? 'Mark Unpaid' : 'Mark Paid'}
                         </button>
                       </div>
+                    </div>
+
+                    {/* ✅ NEW DELETE BUTTON */}
+                    <div className="mt-4 pt-4 border-t border-red-200/30">
+                      <button
+                        type="button"
+                        onClick={() => deleteOrder(o.id)}
+                        className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 hover:text-red-700 transition-colors"
+                      >
+                        <Trash2 className="h-4 w-4" /> Delete Order
+                      </button>
                     </div>
                   </div>
                 </div>

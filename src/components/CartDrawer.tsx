@@ -104,7 +104,7 @@ export function CartDrawer() {
       />
 
       <aside
-        className={`relative flex h-full w-full max-w-md flex-col bg-cream-100 shadow-2xl transition-transform duration-300 ease-in-out ${closing ? 'translate-y-full' : 'translate-y-0'
+        className={`relative flex h-screen w-full max-w-md flex-col bg-cream-100 shadow-2xl transition-transform duration-300 ease-in-out ${closing ? 'translate-y-full' : 'translate-y-0'
           }`}
       >
         <div className="flex items-center justify-between border-b border-kraft-300/60 px-5 py-4">

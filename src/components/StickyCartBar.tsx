@@ -7,7 +7,6 @@ export function StickyCartBar() {
   const [visible, setVisible] = useState(false);
   const [isSlidingDown, setIsSlidingDown] = useState(false);
   const [isEntering, setIsEntering] = useState(false);
-  const [isClosing, setIsClosing] = useState(false); // NEW: Blocking flag
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const enterTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -21,10 +20,8 @@ export function StickyCartBar() {
     };
   }, []);
 
-  // Block this from running while drawer is closing
+  // Show button when items are added, but ONLY if drawer is closed
   useEffect(() => {
-    if (isClosing) return;
-
     if (totalItems > 0 && !isOpen) {
       setVisible(true);
       setIsSlidingDown(false);
@@ -33,48 +30,43 @@ export function StickyCartBar() {
     } else if (isOpen) {
       setVisible(false);
     }
-  }, [totalItems, isOpen, isClosing]);
+  }, [totalItems, isOpen]);
 
+  // Handle drawer closing -> Slide UP after 300ms delay
   useEffect(() => {
     const handleDrawerClosed = () => {
       if (totalItems > 0) {
         if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
 
-        // 1. Lock the useEffect so it can't reset isEntering
-        setIsClosing(true);
-
-        // 2. Wait 300ms for drawer to finish sliding down
+        // Wait 300ms for the drawer to fully go away, THEN slide up
         closeTimeoutRef.current = setTimeout(() => {
-          setVisible(true);
-          setIsSlidingDown(false);
-          setIsEntering(true);
+          if (!isOpen && totalItems > 0) {
+            setVisible(true);
+            setIsSlidingDown(false);
+            setIsEntering(true); // Start hidden at the bottom
 
-          enterTimeoutRef.current = setTimeout(() => {
-            setIsEntering(false); // Triggers 300ms slide-up
-            setIsClosing(false);  // Unlock the useEffect
-          }, 10);
-        }, 300); 
+            enterTimeoutRef.current = setTimeout(() => {
+              setIsEntering(false); // Triggers slide-up animation
+            }, 10);
+          }
+        }, 300);
       }
     };
+
     window.addEventListener('cart-drawer-closed', handleDrawerClosed);
     return () => window.removeEventListener('cart-drawer-closed', handleDrawerClosed);
-  }, [totalItems]);
+  }, [totalItems, isOpen]);
 
   if (totalItems === 0 || isOpen || !visible) return null;
 
   const handleOpenDrawer = () => {
+    // 1. Slide down immediately
     setIsSlidingDown(true);
 
+    // 2. Wait 300ms for slide animation, THEN open drawer
     setTimeout(() => {
-      setVisible(false);
+      setVisible(false); // Hide completely after animation
       window.dispatchEvent(new Event('open-cart-drawer'));
-      
-      setTimeout(() => {
-        const cartButton = document.querySelector('[aria-label="Open cart"], .cart-trigger, button:has(.lucide-shopping-bag)');
-        if (cartButton && cartButton instanceof HTMLElement) {
-          cartButton.click();
-        }
-      }, 20);
     }, 300);
   };
 
@@ -86,7 +78,7 @@ export function StickyCartBar() {
 
   return (
     <div 
-className={`fixed bottom-8 right-6 z-[9999] transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 ${translateClass}`}
+      className={`fixed bottom-8 right-6 z-[9999] transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 ${translateClass}`}
     >
       <button
         onClick={handleOpenDrawer}

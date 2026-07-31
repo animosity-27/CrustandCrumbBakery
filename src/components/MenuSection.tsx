@@ -101,7 +101,6 @@ export function MenuSection() {
     </section>
   );
 }
-
 function FeaturedSpotlight({ product, onAdd }: { product: Product; onAdd: () => void }) {
   return (
     <Reveal delay={120} className="mx-auto mt-12 max-w-5xl px-5 sm:px-8">
@@ -145,7 +144,6 @@ function FeaturedSpotlight({ product, onAdd }: { product: Product; onAdd: () => 
     </Reveal>
   );
 }
-
 function MenuCard({ product, index, onAdd }: { product: Product; index: number; onAdd: () => void }) {
   const soldOut = product.stock <= 0;
   return (

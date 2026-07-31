@@ -84,55 +84,6 @@ export function CartDrawer() {
     setStage('success');
   };
 
-    // BRUTE FORCE DATA FORMATTING
-    const payload = items.map((i) => ({
-      product_id: i.product_id || null,
-      name: String(i.name),
-      price: Number(i.price),
-      quantity: Number(i.quantity)
-    }));
-
-    const totalAmount = Number(subtotal);
-
-    console.log("SENDING TO SUPABASE:", {
-      p_items: payload,
-      p_name: name.trim(),
-      p_contact: contact.trim(),
-      p_slot: slot,
-      p_payment: payment,
-      p_total: totalAmount,
-      p_note: note.trim()
-    });
-
-    const { data, error: rpcError } = await supabase.rpc('create_order', {
-      p_items: payload,
-      p_name: String(name.trim()),
-      p_contact: String(contact.trim()),
-      p_slot: String(slot),
-      p_payment: String(payment),
-      p_total: totalAmount,
-      p_note: String(note.trim())
-    });
-
-    setPlacing(false);
-
-    if (rpcError) {
-      console.error('🔥 FULL RPC ERROR OBJECT:', rpcError);
-      // FORCE IT TO SHOW THE SUPABASE ERROR MESSAGE ON SCREEN
-      setError(`Supabase Error: ${rpcError.message || rpcError.details || rpcError.hint || 'Unknown database error'}`);
-      return;
-    }
-
-    if (!data) {
-      setError('No data returned from the server.');
-      return;
-    }
-
-    setOrder(data as Order);
-    clear();
-    setStage('success');
-  };
-
   const handleClose = (callback?: () => void) => {
     if (closing) return;
     setClosing(true);

@@ -1,3 +1,4 @@
+import { LoadingScreen } from '@/components/LoadingScreen';
 import { useEffect, useState } from 'react';
 import { CartProvider } from '@/lib/cart';
 import { AdminProvider, useAdmin } from '@/lib/admin';
@@ -73,24 +74,28 @@ function AppShell() {
       </>
     );
   }
-
   // home
   return (
     <>
+      {/* 1. LOADING SCREEN AT THE VERY TOP */}
+      <LoadingScreen />
+      
       <Navbar page={page} onNavigate={(p) => setPage(p as Page)} />
       
-      {/* ✅ WRAPPER WITH animate-on-load TO KICKSTART PC ANIMATIONS */}
+      {/* 2. PAGE TRANSITION WRAPPER - Fades in with slide */}
       <div className="animate-on-load">
-        <main className="min-h-screen" style={{ background: 'radial-gradient(ellipse at 50% 0%, #fcf9f5 0%, #ede0d4 100%)' }}>
-          <Hero onOrder={goOrder} />
-          <Ticker />
-          <MenuSection />
-          <ReviewsSection />
-          <ContactSection onOrder={goOrder} />
-        </main>
-        <Footer onAdmin={() => setPage('admin-login')} />
-        <CartDrawer />
-        <StickyCartBar />
+        <div className="transition-all duration-500 ease-in-out animate-fadeInUp">
+          <main className="min-h-screen" style={{ background: 'radial-gradient(ellipse at 50% 0%, #fcf9f5 0%, #ede0d4 100%)' }}>
+            <Hero onOrder={goOrder} />
+            <Ticker />
+            <MenuSection />
+            <ReviewsSection />
+            <ContactSection onOrder={goOrder} />
+          </main>
+          <Footer onAdmin={() => setPage('admin-login')} />
+          <CartDrawer />
+          <StickyCartBar />
+        </div>
       </div>
     </>
   );

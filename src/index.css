@@ -317,3 +317,36 @@ section[id] {
 .animate-on-load .cc-notch {
   animation-play-state: running !important;
 }
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(24px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeInUp {
+  animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Universal hover/click transitions for everything interactive */
+a, button, .cc-card, .cc-tag, .cc-notch, img[class*="hover:"] {
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+a:hover, button:hover {
+  transform: scale(1.02);
+}
+
+.cc-card:hover {
+  transform: translateY(-12px) scale(1.01);
+  box-shadow: 0 24px 60px -12px rgba(62, 39, 35, 0.35);
+}
+
+.cc-notch:hover, .cc-tag:hover {
+  transform: translateY(-4px) scale(1.02);
+  filter: drop-shadow(0 6px 0 rgba(62, 39, 35, 0.30));
+}
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(24px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeInUp {
+  animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}

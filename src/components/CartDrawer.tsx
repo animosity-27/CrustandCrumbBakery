@@ -78,10 +78,10 @@ export function CartDrawer() {
       return;
     }
 
-    // ✅ FORCE YOUR SUCCESS SCREEN TO SHOW
+    // ✅ FIX: Set success stage BEFORE clearing the cart
     setOrder(data as Order);
+    setStage('success');
     clear();
-    setStage('success'); // <--- THIS OPENS YOUR SUCCESS SCREEN
   };
 
   const handleClose = (callback?: () => void) => {

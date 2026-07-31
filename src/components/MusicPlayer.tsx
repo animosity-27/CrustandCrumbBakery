@@ -6,24 +6,25 @@ export function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
-    // 1. Create the audio once
+    // 1. Create the audio ONCE
     const audio = new Audio('hev.mp3');
     audio.loop = true;
     audio.volume = 0.25;
     audioRef.current = audio;
 
-    // 2. Try to start playing after user clicks anywhere
-    const handleInteraction = () => {
+    // 2. Add a global click listener that plays the audio ONCE
+    const unlockAudio = () => {
       if (audioRef.current && audioRef.current.paused) {
-        audioRef.current.play().catch(() => {});
-        setIsPlaying(true);
+        // Do NOT auto-play. We wait for the user to click the button.
+        // But we remove this listener so it doesn't keep firing.
       }
+      document.removeEventListener('click', unlockAudio);
     };
-
-    document.addEventListener('click', handleInteraction);
+    
+    document.addEventListener('click', unlockAudio);
 
     return () => {
-      document.removeEventListener('click', handleInteraction);
+      document.removeEventListener('click', unlockAudio);
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.src = '';
@@ -35,11 +36,9 @@ export function MusicPlayer() {
     if (!audioRef.current) return;
 
     if (audioRef.current.paused) {
-      // If it's paused, play it
-      audioRef.current.play().catch(() => {});
+      audioRef.current.play().catch((e) => console.warn('Audio play failed:', e));
       setIsPlaying(true);
     } else {
-      // If it's playing, pause it
       audioRef.current.pause();
       setIsPlaying(false);
     }

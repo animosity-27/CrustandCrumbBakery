@@ -37,17 +37,97 @@ export function CartDrawer() {
   if (!isOpen && !closing) return null;
 
   const placeOrder = async () => {
-    if (!name.trim() || !contact.trim()) { setError('Please add your name and contact so we can reach you.'); return; }
+    if (!name.trim() || !contact.trim()) { 
+      setError('Please add your name and contact so we can reach you.'); 
+      return; 
+    }
     if (items.length === 0) return;
+    
     setPlacing(true);
     setError(null);
-    const payload = items.map((i) => ({ product_id: i.product_id, name: i.name, price: i.price, quantity: i.quantity }));
+
+    // NUCLEAR OPTION: Send null for product_id
+    const payload = items.map((i) => ({ 
+      product_id: null, 
+      name: String(i.name), 
+      price: Number(i.price), 
+      quantity: Number(i.quantity) 
+    }));
+
+    const totalAmount = Number(subtotal);
+
     const { data, error: rpcError } = await supabase.rpc('create_order', {
-      p_items: payload, p_name: name.trim(), p_contact: contact.trim(),
-      p_slot: slot, p_payment: payment, p_total: subtotal, p_note: note.trim(),
+      p_items: payload,
+      p_name: String(name.trim()),
+      p_contact: String(contact.trim()),
+      p_slot: String(slot),
+      p_payment: String(payment),
+      p_total: totalAmount,
+      p_note: String(note.trim())
     });
+
     setPlacing(false);
-    if (rpcError || !data) { setError('Something went wrong placing your order. Please try again.'); return; }
+
+    if (rpcError) {
+      console.error('🔥 FINAL ERROR:', rpcError);
+      setError(`Supabase Error: ${rpcError.message || rpcError.details || 'Unknown error'}`);
+      return;
+    }
+
+    if (!data) {
+      setError('No data returned from the server.');
+      return;
+    }
+
+    setOrder(data as Order);
+    clear();
+    setStage('success');
+  };
+
+    // BRUTE FORCE DATA FORMATTING
+    const payload = items.map((i) => ({
+      product_id: i.product_id || null,
+      name: String(i.name),
+      price: Number(i.price),
+      quantity: Number(i.quantity)
+    }));
+
+    const totalAmount = Number(subtotal);
+
+    console.log("SENDING TO SUPABASE:", {
+      p_items: payload,
+      p_name: name.trim(),
+      p_contact: contact.trim(),
+      p_slot: slot,
+      p_payment: payment,
+      p_total: totalAmount,
+      p_note: note.trim()
+    });
+
+    const { data, error: rpcError } = await supabase.rpc('create_order', {
+      p_items: payload,
+      p_name: String(name.trim()),
+      p_contact: String(contact.trim()),
+      p_slot: String(slot),
+      p_payment: String(payment),
+      p_total: totalAmount,
+      p_note: String(note.trim())
+    });
+
+    setPlacing(false);
+
+    if (rpcError) {
+      console.error('🔥 FULL RPC ERROR OBJECT:', rpcError);
+      // FORCE IT TO SHOW THE SUPABASE ERROR MESSAGE ON SCREEN
+      setError(`Supabase Error: ${rpcError.message || rpcError.details || rpcError.hint || 'Unknown database error'}`);
+      return;
+    }
+
+    if (!data) {
+      setError('No data returned from the server.');
+      return;
+    }
+
     setOrder(data as Order);
     clear();
     setStage('success');
@@ -111,10 +191,10 @@ export function CartDrawer() {
                   <button
                     type="button"
                     onClick={() => {
-                      handleClose(); // closes drawer with 300ms animation
+                      handleClose();
                       setTimeout(() => {
                         document.querySelector('#menu')?.scrollIntoView({ behavior: 'smooth' });
-                      }, 350); // wait 350ms (slightly longer than the drawer animation)
+                      }, 350);
                     }}
                     className="cc-notch mt-5 bg-sage-500 px-6 py-3 text-sm font-extrabold text-white"
                   >

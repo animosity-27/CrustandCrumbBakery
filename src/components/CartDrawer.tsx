@@ -262,7 +262,7 @@ function SuccessView({ order, payment, slot, onDone }: { order: Order; payment: 
           <div><p className="text-xs font-bold text-espresso-500">Pickup</p><p className="font-bold text-espresso-800">{slot}</p></div>
           <div><p className="text-xs font-bold text-espresso-500">Payment</p><p className="font-bold text-espresso-800">{PAYMENT_LABELS[payment]}</p></div>
           <div><p className="text-xs font-bold text-espresso-500">Total</p><p className="font-receipt font-bold text-espresso-800">{formatPeso(Number(order.total))}</p></div>
-          <div><p className="text-xs font-bold text-espresso-500">Location</p><p className="font-bold text-espresso-800">BPP Laboratory</p></div>
+          <div><p className="text-xs font-bold text-espresso-500">Location</p><p className="font-bold text-espresso-800">12-Gold</p></div>
         </div>
       </div>
 

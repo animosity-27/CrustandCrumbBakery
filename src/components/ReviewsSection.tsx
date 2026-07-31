@@ -95,7 +95,7 @@ export function ReviewsSection() {
         <Reveal className="lg:col-span-2">
           <form onSubmit={submit} className="kraft-paper scoring-top relative p-6 shadow-card sm:p-8">
             <h3 className="slash-accent font-display text-xl font-extrabold text-espresso-800">Leave a review</h3>
-            <p className="mt-1 text-sm text-espresso-600">Got an order code? One review per order — tell us how it tasted.</p>
+            <p className="mt-1 text-sm text-espresso-600">Got an order code? One review per order, tell us how it tasted.</p>
 
             <label className="mt-5 block text-xs font-bold uppercase tracking-wider text-espresso-700">Order Code</label>
             <input value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} placeholder="CC-XXXX" className="cc-input mt-1.5 font-receipt tracking-wider" />

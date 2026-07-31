@@ -20,7 +20,7 @@ export function Footer({ onAdmin }: { onAdmin: () => void }) {
             </div>
           </div>
           <p className="text-kraft-300 text-sm leading-relaxed flex items-center gap-1.5">
-            Made with <Heart className="h-3.5 w-3.5 fill-mustard-500 text-mustard-500" /> at BPP Laboratory
+            12-Gold Sakalam <Heart className="h-3.5 w-3.5 fill-mustard-500 text-mustard-500" /><Heart className="h-3.5 w-3.5 fill-mustard-500 text-mustard-500" /><Heart className="h-3.5 w-3.5 fill-mustard-500 text-mustard-500" />
           </p>
         </div>
 
@@ -38,7 +38,7 @@ export function Footer({ onAdmin }: { onAdmin: () => void }) {
         <div className="space-y-3">
           <h4 className="font-semibold text-mustard-400 uppercase tracking-wider text-sm">Info</h4>
           <ul className="space-y-2 text-kraft-300 text-sm">
-            <li>BPP Laboratory</li>
+            <li>Made with love yan, kaya why not diba?</li>
             <li>Pickup: 1:30–2:00 PM</li>
             <li>Pickup: 2:30–3:00 PM</li>
           </ul>

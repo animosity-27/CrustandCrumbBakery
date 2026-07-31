@@ -6,23 +6,22 @@ export function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
-    // Create the audio element once
+    // 1. Create the audio once
     const audio = new Audio('/bg-music.mp3');
     audio.loop = true;
-    audio.volume = 0.25; // comfortable background volume
+    audio.volume = 0.25;
     audioRef.current = audio;
 
-    // Try to auto-play after user interaction (browsers block autoplay)
+    // 2. Try to start playing after user clicks anywhere
     const handleInteraction = () => {
-      if (audioRef.current && !isPlaying) {
+      if (audioRef.current && audioRef.current.paused) {
         audioRef.current.play().catch(() => {});
         setIsPlaying(true);
       }
     };
 
     document.addEventListener('click', handleInteraction);
-    
-    // Cleanup when component unmounts
+
     return () => {
       document.removeEventListener('click', handleInteraction);
       if (audioRef.current) {
@@ -34,13 +33,15 @@ export function MusicPlayer() {
 
   const toggleMusic = () => {
     if (!audioRef.current) return;
-    
-    if (isPlaying) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-    } else {
+
+    if (audioRef.current.paused) {
+      // If it's paused, play it
       audioRef.current.play().catch(() => {});
       setIsPlaying(true);
+    } else {
+      // If it's playing, pause it
+      audioRef.current.pause();
+      setIsPlaying(false);
     }
   };
 

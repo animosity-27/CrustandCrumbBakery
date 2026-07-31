@@ -20,7 +20,7 @@ export function StickyCartBar() {
     };
   }, []);
 
-  // Show button when items are added, but ONLY if drawer is closed
+  // Keep the button alive in the DOM. Never unmount it.
   useEffect(() => {
     if (totalItems > 0 && !isOpen) {
       setVisible(true);
@@ -28,11 +28,11 @@ export function StickyCartBar() {
     } else if (totalItems === 0) {
       setVisible(false);
     } else if (isOpen) {
-      setVisible(false); // 👈 This kills the button immediately when drawer opens
+      setVisible(false);
     }
   }, [totalItems, isOpen]);
 
-  // Handle drawer closing -> Slide UP after 300ms delay
+  // Reappear after drawer closes
   useEffect(() => {
     const handleDrawerClosed = () => {
       if (totalItems > 0) {
@@ -56,10 +56,12 @@ export function StickyCartBar() {
     return () => window.removeEventListener('cart-drawer-closed', handleDrawerClosed);
   }, [totalItems, isOpen]);
 
-  // 🔥 THE FIX: Physically prevents rendering if drawer is open
-  if (totalItems === 0 || isOpen || !visible) return null;
+  // 🔥 CRITICAL CHANGE: We never return null. We always render the HTML.
+  // We just hide it with CSS using opacity and pointer-events.
+  // This keeps the click handler fully alive at all times.
 
   const handleOpenDrawer = () => {
+    if (isOpen || !visible) return;
     setIsSlidingDown(true);
 
     setTimeout(() => {

@@ -78,10 +78,12 @@ export function CartDrawer() {
       return;
     }
 
-    // ✅ FIX: Set success stage BEFORE clearing the cart
     setOrder(data as Order);
     setStage('success');
-    clear();
+    // Wait 500ms for the UI to switch to success view, THEN clear the cart
+    setTimeout(() => {
+      clear();
+    }, 500);
   };
 
   const handleClose = (callback?: () => void) => {

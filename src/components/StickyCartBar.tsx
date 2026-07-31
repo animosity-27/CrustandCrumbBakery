@@ -60,6 +60,9 @@ export function StickyCartBar() {
   if (totalItems === 0 || isOpen || !visible) return null;
 
   const handleOpenDrawer = () => {
+    // ✅ PREVENT MULTI-CLICK FREEZE
+    if (!visible) return;
+
     // 1. Slide down immediately
     setIsSlidingDown(true);
 
@@ -67,7 +70,7 @@ export function StickyCartBar() {
     setTimeout(() => {
       setVisible(false);
       window.dispatchEvent(new Event('open-cart-drawer'));
-    }, 10); // 🔥 CHANGED FROM 300ms TO 10ms
+    }, 10);
   };
 
   const translateClass = isSlidingDown 

@@ -94,7 +94,7 @@ export function CartDrawer() {
   };
 
   return (
-    <div className={`fixed inset-0 z-50 flex justify-end ${closing ? 'pointer-events-none' : 'pointer-events-auto'}`}>
+<div className={`fixed inset-0 z-50 flex justify-end bg-transparent ${closing ? 'pointer-events-none' : 'pointer-events-auto'}`}>
       <div
         className={`absolute inset-0 bg-espresso-900/40 backdrop-blur-sm transition-opacity duration-300 ease-in-out ${closing ? 'opacity-0' : 'opacity-100'
           }`}

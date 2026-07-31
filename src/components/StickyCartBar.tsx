@@ -20,7 +20,7 @@ export function StickyCartBar() {
     };
   }, []);
 
-  // Keep the button alive in the DOM. Never unmount it.
+  // Show button when items are added, but ONLY if drawer is closed
   useEffect(() => {
     if (totalItems > 0 && !isOpen) {
       setVisible(true);
@@ -32,20 +32,21 @@ export function StickyCartBar() {
     }
   }, [totalItems, isOpen]);
 
-  // Reappear after drawer closes
+  // Handle drawer closing -> Slide UP after 300ms delay
   useEffect(() => {
     const handleDrawerClosed = () => {
       if (totalItems > 0) {
         if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
 
+        // Wait 300ms for the drawer to fully go away, THEN slide up
         closeTimeoutRef.current = setTimeout(() => {
           if (!isOpen && totalItems > 0) {
             setVisible(true);
             setIsSlidingDown(false);
-            setIsEntering(true);
+            setIsEntering(true); // Start hidden at the bottom
 
             enterTimeoutRef.current = setTimeout(() => {
-              setIsEntering(false);
+              setIsEntering(false); // Triggers slide-up animation
             }, 10);
           }
         }, 300);
@@ -56,18 +57,17 @@ export function StickyCartBar() {
     return () => window.removeEventListener('cart-drawer-closed', handleDrawerClosed);
   }, [totalItems, isOpen]);
 
-  // 🔥 CRITICAL CHANGE: We never return null. We always render the HTML.
-  // We just hide it with CSS using opacity and pointer-events.
-  // This keeps the click handler fully alive at all times.
+  if (totalItems === 0 || isOpen || !visible) return null;
 
   const handleOpenDrawer = () => {
-    if (isOpen || !visible) return;
+    // 1. Slide down immediately
     setIsSlidingDown(true);
 
+    // 2. Wait 300ms for slide animation, THEN open drawer
     setTimeout(() => {
-      setVisible(false);
+      setVisible(false); // Hide completely after animation
       window.dispatchEvent(new Event('open-cart-drawer'));
-    }, 10);
+    }, 300);
   };
 
   const translateClass = isSlidingDown 
@@ -78,7 +78,7 @@ export function StickyCartBar() {
 
   return (
     <div 
-      className={`fixed bottom-8 right-6 z-[9999] transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 ${translateClass}`}
+      className={`fixed bottom-8 right-6 z-[9999] transition-all duration-300 ease-in-out ${translateClass}`}
     >
       <button
         onClick={handleOpenDrawer}

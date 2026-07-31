@@ -28,7 +28,7 @@ export function StickyCartBar() {
     } else if (totalItems === 0) {
       setVisible(false);
     } else if (isOpen) {
-      setVisible(false);
+      setVisible(false); // 👈 This kills the button immediately when drawer opens
     }
   }, [totalItems, isOpen]);
 
@@ -38,15 +38,14 @@ export function StickyCartBar() {
       if (totalItems > 0) {
         if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
 
-        // Wait 300ms for the drawer to fully go away, THEN slide up
         closeTimeoutRef.current = setTimeout(() => {
           if (!isOpen && totalItems > 0) {
             setVisible(true);
             setIsSlidingDown(false);
-            setIsEntering(true); // Start hidden at the bottom
+            setIsEntering(true);
 
             enterTimeoutRef.current = setTimeout(() => {
-              setIsEntering(false); // Triggers slide-up animation
+              setIsEntering(false);
             }, 10);
           }
         }, 300);
@@ -57,16 +56,12 @@ export function StickyCartBar() {
     return () => window.removeEventListener('cart-drawer-closed', handleDrawerClosed);
   }, [totalItems, isOpen]);
 
+  // 🔥 THE FIX: Physically prevents rendering if drawer is open
   if (totalItems === 0 || isOpen || !visible) return null;
 
   const handleOpenDrawer = () => {
-    // ✅ PREVENT MULTI-CLICK FREEZE
-    if (!visible) return;
-
-    // 1. Slide down immediately
     setIsSlidingDown(true);
 
-    // 2. Wait 10ms for the CSS to start, THEN open drawer immediately
     setTimeout(() => {
       setVisible(false);
       window.dispatchEvent(new Event('open-cart-drawer'));

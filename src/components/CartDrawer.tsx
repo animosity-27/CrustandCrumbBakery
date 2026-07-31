@@ -36,6 +36,7 @@ export function CartDrawer() {
     }
   }, [isOpen]);
 
+  // If not open and not closing, render nothing
   if (!isOpen && !closing) return null;
 
   const placeOrder = async () => {
@@ -104,10 +105,10 @@ export function CartDrawer() {
       />
 
       <aside
-        className={`relative flex h-screen w-full max-w-md flex-col bg-cream-100 shadow-2xl transition-transform duration-300 ease-in-out ${closing ? 'translate-y-full' : 'translate-y-0'
+        className={`relative flex h-full w-full max-w-md flex-col bg-cream-100 shadow-2xl transition-transform duration-300 ease-in-out ${closing ? 'translate-y-full' : 'translate-y-0'
           }`}
       >
-        <div className="flex items-center justify-between border-b border-kraft-300/60 px-5 py-4">
+        <div className="flex-shrink-0 flex items-center justify-between border-b border-kraft-300/60 px-5 py-4">
           <div className="flex items-center gap-2">
             <ShoppingBag className="h-5 w-5 text-sage-600" />
             <h2 className="font-display text-lg font-extrabold text-espresso-800">
@@ -122,7 +123,7 @@ export function CartDrawer() {
           </button>
         </div>
 
-        <div className="scroll-thin flex-1 overflow-y-auto px-5 py-4">
+        <div className="flex-1 overflow-y-auto px-5 py-4">
           {stage === 'success' && order && (
             <SuccessView
               order={order}
@@ -218,7 +219,7 @@ export function CartDrawer() {
         </div>
 
         {stage !== 'success' && items.length > 0 && (
-          <div className="border-t border-kraft-300/60 px-5 py-4">
+          <div className="flex-shrink-0 border-t border-kraft-300/60 px-5 py-4">
             {error && <p className="mb-3 bg-red-100 px-4 py-2.5 text-sm font-bold text-red-700">{error}</p>}
             <div className="mb-3 flex items-center justify-between">
               <span className="text-sm font-bold text-espresso-600">Subtotal</span>

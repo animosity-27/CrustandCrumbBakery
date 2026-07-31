@@ -308,3 +308,12 @@ section[id] {
   .reveal { transition: none; opacity: 1; transform: none; }
   .nav-link::after, .cc-notch, .cc-tag, .cc-card, .cc-zoom img, .stamp-seal svg, .ticker-track, .steam, .oven-glow { transition: none; animation: none; }
 }
+/* FORCE ANIMATIONS TO START INSTANTLY ON PC */
+.animate-on-load .steam,
+.animate-on-load .dough-rise,
+.animate-on-load .oven-glow,
+.animate-on-load .cc-card,
+.animate-on-load .cc-tag,
+.animate-on-load .cc-notch {
+  animation-play-state: running !important;
+}

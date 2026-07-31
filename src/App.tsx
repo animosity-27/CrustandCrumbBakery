@@ -78,18 +78,20 @@ function AppShell() {
   return (
     <>
       <Navbar page={page} onNavigate={(p) => setPage(p as Page)} />
-<main className="min-h-screen" style={{ background: 'radial-gradient(ellipse at 50% 0%, #fcf9f5 0%, #ede0d4 100%)' }}>
-        <Hero onOrder={goOrder} />
-        <Ticker />
-        <MenuSection />
-        <ReviewsSection />
-        <ContactSection onOrder={goOrder} />
-      </main>
-      <Footer onAdmin={() => setPage('admin-login')} />
-      <CartDrawer />
-
-      {/* <--- ADDED THIS LINE RIGHT HERE */}
-      <StickyCartBar />
+      
+      {/* ✅ WRAPPER WITH animate-on-load TO KICKSTART PC ANIMATIONS */}
+      <div className="animate-on-load">
+        <main className="min-h-screen" style={{ background: 'radial-gradient(ellipse at 50% 0%, #fcf9f5 0%, #ede0d4 100%)' }}>
+          <Hero onOrder={goOrder} />
+          <Ticker />
+          <MenuSection />
+          <ReviewsSection />
+          <ContactSection onOrder={goOrder} />
+        </main>
+        <Footer onAdmin={() => setPage('admin-login')} />
+        <CartDrawer />
+        <StickyCartBar />
+      </div>
     </>
   );
 }

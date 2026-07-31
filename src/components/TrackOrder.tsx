@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Search, Loader2, Package, ChefHat, ShoppingBag, CheckCircle2, XCircle, Clock, MapPin, ArrowLeft } from 'lucide-react';
-import { formatPeso, PAYMENT_LABELS, type Order, type OrderItem, type OrderStatus } from '@/lib/supabase';
+import { supabase, formatPeso, PAYMENT_LABELS, type Order, type OrderItem, type OrderStatus } from '@/lib/supabase';
 import { ScoreSlash } from '@/components/Decorations';
 
 type TrackProps = { initialCode?: string; onBack: () => void };
@@ -23,14 +23,40 @@ export function TrackOrder({ initialCode, onBack }: TrackProps) {
   const lookup = async (codeToFind: string) => {
     if (!codeToFind.trim()) { setError('Enter your order code (e.g. CC-A7F3).'); return; }
     setLoading(true); setError(null); setOrder(null); setItems([]);
-    const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/track-order?code=${encodeURIComponent(codeToFind.trim().toUpperCase())}`;
+
     try {
-      const res = await fetch(url, { headers: { Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}` } });
-      const data = await res.json();
-      if (!res.ok) { setError(data?.error || 'Could not find that order.'); return; }
-      setOrder(data.order as Order);
-      setItems(data.items as OrderItem[]);
-    } catch { setError('Network error. Please try again.'); } finally { setLoading(false); }
+      // ✅ QUERY THE DATABASE DIRECTLY - NO EDGE FUNCTION NEEDED
+      const { data: orderData, error: orderError } = await supabase
+        .from('orders')
+        .select('*')
+        .eq('code', codeToFind.trim().toUpperCase())
+        .maybeSingle();
+
+      if (orderError || !orderData) {
+        setError('Could not find that order. Please check your code.');
+        setLoading(false);
+        return;
+      }
+
+      // Fetch the items for this order
+      const { data: itemsData, error: itemsError } = await supabase
+        .from('order_items')
+        .select('*')
+        .eq('order_id', orderData.id);
+
+      if (itemsError) {
+        setError('Error loading order items.');
+        setLoading(false);
+        return;
+      }
+
+      setOrder(orderData as Order);
+      setItems(itemsData as OrderItem[]);
+    } catch {
+      setError('Network error. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {

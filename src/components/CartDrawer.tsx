@@ -46,7 +46,6 @@ export function CartDrawer() {
     setPlacing(true);
     setError(null);
 
-    // NUCLEAR OPTION: Send null for product_id
     const payload = items.map((i) => ({ 
       product_id: null, 
       name: String(i.name), 
@@ -69,19 +68,21 @@ export function CartDrawer() {
     setPlacing(false);
 
     if (rpcError) {
-      console.error('🔥 FINAL ERROR:', rpcError);
-      setError(`Supabase Error: ${rpcError.message || rpcError.details || 'Unknown error'}`);
-      return;
-    }
-    if (!data) {
-      setError('No data returned from the server.');
+      console.error('ERROR:', rpcError);
+      setError(`Error: ${rpcError.message}`);
       return;
     }
 
-    console.log("✅ ORDER SUCCESS DATA:", data);
+    if (!data) {
+      setError('No data returned.');
+      return;
+    }
+
+    // ✅ FORCE YOUR SUCCESS SCREEN TO SHOW
     setOrder(data as Order);
     clear();
-    setStage('success');
+    setStage('success'); // <--- THIS OPENS YOUR SUCCESS SCREEN
+  };
 
   const handleClose = (callback?: () => void) => {
     if (closing) return;

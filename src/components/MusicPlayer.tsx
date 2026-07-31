@@ -6,25 +6,24 @@ export function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
-    // 1. Create the audio ONCE
+    // Create the audio once
     const audio = new Audio('/bg-music.mp3');
     audio.loop = true;
-    audio.volume = 0.25;
+    audio.volume = 0.3;
     audioRef.current = audio;
 
-    // 2. Add a global click listener that plays the audio ONCE
-    const unlockAudio = () => {
-      if (audioRef.current && audioRef.current.paused) {
-        // Do NOT auto-play. We wait for the user to click the button.
-        // But we remove this listener so it doesn't keep firing.
+    // Try to autoplay after user interaction
+    const handleInteraction = () => {
+      if (audioRef.current && !isPlaying) {
+        audioRef.current.play().catch(() => {});
+        setIsPlaying(true);
       }
-      document.removeEventListener('click', unlockAudio);
     };
-    
-    document.addEventListener('click', unlockAudio);
+
+    document.addEventListener('click', handleInteraction);
 
     return () => {
-      document.removeEventListener('click', unlockAudio);
+      document.removeEventListener('click', handleInteraction);
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.src = '';
@@ -34,13 +33,13 @@ export function MusicPlayer() {
 
   const toggleMusic = () => {
     if (!audioRef.current) return;
-
-    if (audioRef.current.paused) {
-      audioRef.current.play().catch((e) => console.warn('Audio play failed:', e));
-      setIsPlaying(true);
-    } else {
+    
+    if (isPlaying) {
       audioRef.current.pause();
       setIsPlaying(false);
+    } else {
+      audioRef.current.play().catch(() => {});
+      setIsPlaying(true);
     }
   };
 

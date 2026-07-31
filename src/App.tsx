@@ -4,6 +4,7 @@ import { CartProvider } from '@/lib/cart';
 import { AdminProvider, useAdmin } from '@/lib/admin';
 import { Navbar } from '@/components/Navbar';
 import { Hero } from '@/components/Hero';
+import { MusicPlayer } from '@/components/MusicPlayer';
 import { Ticker } from '@/components/Ticker';
 import { MenuSection } from '@/components/MenuSection';
 import { ReviewsSection } from '@/components/ReviewsSection';
@@ -101,6 +102,7 @@ function App() {
   return (
     <AdminProvider>
       <CartProvider>
+        <MusicPlayer />
         <AppShell />
       </CartProvider>
     </AdminProvider>

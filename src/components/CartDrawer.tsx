@@ -73,16 +73,15 @@ export function CartDrawer() {
       setError(`Supabase Error: ${rpcError.message || rpcError.details || 'Unknown error'}`);
       return;
     }
-
     if (!data) {
       setError('No data returned from the server.');
       return;
     }
 
+    console.log("✅ ORDER SUCCESS DATA:", data);
     setOrder(data as Order);
     clear();
     setStage('success');
-  };
 
   const handleClose = (callback?: () => void) => {
     if (closing) return;

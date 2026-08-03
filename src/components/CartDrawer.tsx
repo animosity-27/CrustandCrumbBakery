@@ -7,7 +7,8 @@ export function CartDrawer() {
   const { items, isOpen, closeCart, setQty, remove, subtotal, count, clear } = useCart();
   const [stage, setStage] = useState<'cart' | 'checkout' | 'success'>('cart');
   const [name, setName] = useState('');
-  const [contact, setContact] = useState('');
+  const [regionCode, setRegionCode] = useState('+63');
+  const [contactNumber, setContactNumber] = useState('');
   const [slot, setSlot] = useState(PICKUP_SLOTS[0]);
   const [payment, setPayment] = useState<PaymentMethod>('cash');
   const [note, setNote] = useState('');
@@ -37,13 +38,36 @@ export function CartDrawer() {
   if (!isOpen && !closing) return null;
 
   const placeOrder = async () => {
-    if (!name.trim() || !contact.trim()) {
-      setError('Please add your name and contact.');
+    if (!name.trim()) {
+      setError('Please enter your name.');
       return;
     }
-    if (items.length === 0) return;
+    if (!contactNumber.trim()) {
+      setError('Please enter a contact number.');
+      return;
+    }
+    if (items.length === 0) {
+      setError('Your basket is empty.');
+      return;
+    }
+
     setPlacing(true);
     setError(null);
+
+    // 1. Clean the contact number
+    let cleanedNumber = contactNumber.trim();
+    
+    // If region is +63 (Philippines), strip any leading zero
+    if (regionCode === '+63' && cleanedNumber.startsWith('0')) {
+      cleanedNumber = cleanedNumber.slice(1);
+    }
+
+    // Ensure it's exactly 10 digits for PH, or as-is for others
+    if (regionCode === '+63' && cleanedNumber.length !== 10) {
+      setError('Philippine numbers must be exactly 10 digits (e.g., 9951141455).');
+      setPlacing(false);
+      return;
+    }
 
     const payload = items.map((i) => ({ 
       product_id: null, 
@@ -52,18 +76,31 @@ export function CartDrawer() {
       quantity: Number(i.quantity) 
     }));
 
+    const fullContact = regionCode + cleanedNumber;
+    const totalAmount = Number(subtotal);
+
     const { data, error: rpcError } = await supabase.rpc('create_order', {
       p_items: payload,
       p_name: name.trim(),
-      p_contact: contact.trim(),
+      p_contact: fullContact, 
       p_slot: slot,
       p_payment: payment,
-      p_total: Number(subtotal),
+      p_total: totalAmount,
       p_note: note.trim()
     });
 
     setPlacing(false);
-    if (rpcError || !data) { setError('Error placing order.'); return; }
+
+    if (rpcError) {
+      console.error('🔥 ORDER ERROR:', rpcError);
+      setError(`Error: ${rpcError.message || 'Something went wrong.'}`);
+      return;
+    }
+
+    if (!data) {
+      setError('No data returned from the server.');
+      return;
+    }
 
     setOrder(data as Order);
     setStage('success');
@@ -86,7 +123,6 @@ export function CartDrawer() {
         onClick={() => handleClose()}
       />
 
-      {/* ✅ BASKET SHAPE - CLIPPED TOP CORNERS + HANDLE GROOVE */}
       <aside
         className={`relative flex h-full w-full max-w-md flex-col bg-parchment shadow-2xl transition-transform duration-300 ease-in-out ${closing ? 'translate-y-full' : 'translate-y-0'}
           `}
@@ -96,10 +132,8 @@ export function CartDrawer() {
           boxShadow: '-12px 0 40px -12px rgba(62, 39, 35, 0.35)'
         }}
       >
-        {/* BASKET HANDLE GROOVE (woven look) */}
         <div className="absolute top-0 right-0 h-3 w-8 bg-kraft-200 border-b-2 border-kraft-300/60 rounded-bl-full z-10" style={{ transform: 'translateY(-6px) skewX(-10deg)' }} />
 
-        {/* Header with bakery scoring accent */}
         <div className="scoring-top flex-shrink-0 flex items-center justify-between border-b-2 border-kraft-300/60 px-5 py-4 bg-cream-100/80">
           <div className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-kraft-200 border border-espresso-800/20 transform -rotate-3">
@@ -187,7 +221,46 @@ export function CartDrawer() {
           {stage === 'checkout' && (
             <div className="space-y-4">
               <Field label="Name"><input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your full name" className="cc-input" /></Field>
-              <Field label="Contact (phone or email)"><input value={contact} onChange={(e) => setContact(e.target.value)} placeholder="0917 000 0000" className="cc-input" /></Field>
+              
+              <Field label="Contact Number">
+                <div className="flex flex-col gap-2">
+                  <select
+                    value={regionCode}
+                    onChange={(e) => setRegionCode(e.target.value)}
+                    className="cc-input w-full"
+                  >
+                    <option value="+63">🇵🇭 +63</option>
+                    <option value="+1">🇺🇸 +1</option>
+                    <option value="+44">🇬🇧 +44</option>
+                    <option value="+61">🇦🇺 +61</option>
+                    <option value="+81">🇯🇵 +81</option>
+                    <option value="+82">🇰🇷 +82</option>
+                    <option value="+86">🇨🇳 +86</option>
+                    <option value="+65">🇸🇬 +65</option>
+                    <option value="+60">🇲🇾 +60</option>
+                  </select>
+
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    value={contactNumber}
+                    onChange={(e) => {
+                      const raw = e.target.value.replace(/\D/g, '');
+                      // If PH region (+63), prevent typing a leading 0
+                      if (regionCode === '+63' && raw.startsWith('0')) {
+                        return; // Block the input
+                      }
+                      setContactNumber(raw);
+                    }}
+                    placeholder="912 345 6789"
+                    className="cc-input w-full"
+                    maxLength={11}
+                  />
+                </div>
+                <p className="text-[10px] text-espresso-500 mt-1">Enter your mobile number without the leading 0.</p>
+              </Field>
+
               <Field label="Pickup window">
                 <div className="grid grid-cols-2 gap-2">
                   {PICKUP_SLOTS.map((s) => (

@@ -149,7 +149,7 @@ export function TrackOrder({ initialCode, onBack }: TrackProps) {
                 <p className="text-xs font-extrabold uppercase tracking-wider text-espresso-600">Pickup Details</p>
                 <div className="mt-2 space-y-2 text-sm text-espresso-700">
                   <p className="flex items-center gap-2"><Clock className="h-4 w-4 text-gold-600" /> {order.pickup_slot}</p>
-                  <p className="flex items-center gap-2"><MapPin className="h-4 w-4 text-sage-600" /> BPP Laboratory</p>
+                  <p className="flex items-center gap-2"><MapPin className="h-4 w-4 text-sage-600" />12-Gold</p>
                   <p>Payment: <span className="font-bold">{PAYMENT_LABELS[order.payment_method]}</span></p>
                   {order.note && <p className="bg-kraft-100 p-2 text-xs italic">&ldquo;{order.note}&rdquo;</p>}
                 </div>
